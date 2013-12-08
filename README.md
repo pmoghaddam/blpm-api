@@ -6,4 +6,8 @@ Initially, this will be the API layer and backend layer. However, careful attent
 should be made to keep these two layers coded modularly for a future inevitable separation.
 
 # Tasks
-* Incorporate effective MEAN skeleton structure into applicaiton
+* Setup CoffeeScript
+* Setup Grunt
+* Add Nodemon
+* Setup Testing
+* Incorporate effective MEAN skeleton structure into application
