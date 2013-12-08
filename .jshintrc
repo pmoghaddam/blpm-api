@@ -14,7 +14,7 @@
     "regexp": true, // Prohibit `.` and `[^...]` in regular expressions.
     "undef": true, // Require all non-global variables be declared before they are used.
     "unused": true, // Warn unused variables.
-    "strict": false, // Require `use strict` pragma in every file.
+    "strict": true, // Require `use strict` pragma in every file.
     "trailing": true, // Prohibit trailing whitespaces.
     "smarttabs": false, // Suppresses warnings about mixed tabs and spaces
     "predef": [ // Extra globals.
@@ -22,6 +22,8 @@
         "require",
         "exports",
         "module",
+        "expect",
+        "assert",
         "describe",
         "before",
         "beforeEach",

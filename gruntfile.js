@@ -3,9 +3,9 @@
 
 // # Globbing
 // for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
+// 'test/{,*/}*.js'
 // use this if you want to recursively match all subfolders:
-// 'test/spec/**/*.js'
+// 'test/**/*.js'
 
 
 module.exports = function (grunt) {
@@ -17,7 +17,8 @@ module.exports = function (grunt) {
         root: '.', // Necessary for chrome structure and for fast development
         app: 'app', // Output of compiled files
         src: 'src',
-        public: 'public'
+        public: 'public',
+        test: 'test'
     };
 
     grunt.initConfig({
@@ -25,18 +26,6 @@ module.exports = function (grunt) {
         watch: {
             options: {
                 spawn: false
-            },
-            basic: {
-                files: ['<%= yeoman.src %>/**', '!*.coffee'],
-                tasks: ['copy:dist']
-            },
-            coffee: {
-                files: ['<%= yeoman.src %>/{,*/}*.coffee'],
-                tasks: ['coffee:dist']
-            },
-            coffeeTest: {
-                files: ['test/spec/{,*/}*.coffee'],
-                tasks: ['coffee:test']
             },
             recess: {
                 files: ['<%= yeoman.src %>/public/{,*/}*.less'],
@@ -49,40 +38,19 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                '<%= yeoman.src %>/{,*/}*.js',
-                'test/spec/{,*/}*.js'
+                '<%= yeoman.app %>/**/*.js',
+                'test/**/*.js'
             ]
         },
-        mocha: {
-            all: {
-                options: {
-                    run: true,
-                    urls: ['http://localhost:<%= connect.options.port %>/index.html']
-                }
-            }
-        },
-        coffee: {
-            dist: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= yeoman.src %>',
-                        src: '{,*/}*.coffee',
-                        dest: '<%= yeoman.app %>',
-                        ext: '.js'
-                    }
-                ]
+        mochaTest: {
+            options: {
+                reporter: 'spec'
             },
+            src: ['test/**/*.js']
+        },
+        env: {
             test: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'test/spec',
-                        src: '{,*/}*.coffee',
-                        dest: '.tmp/spec',
-                        ext: '.js'
-                    }
-                ]
+                NODE_ENV: 'test'
             }
         },
         recess: {
@@ -97,23 +65,6 @@ module.exports = function (grunt) {
                         src: '{,*/}*.less',
                         dest: '<%= yeoman.public %>/stylesheets/', // Necessary since no mounting is possible
                         ext: '.css'
-                    }
-                ]
-            }
-        },
-        // Put files not handled in other tasks here
-        copy: {
-            dist: {
-                files: [
-                    {
-                        expand: true,
-                        dot: true,
-                        cwd: '<%= yeoman.src %>',
-                        dest: '<%= yeoman.app %>',
-                        src: [
-                            '**',
-                            '!*.coffee'
-                        ]
                     }
                 ]
             }
@@ -137,11 +88,9 @@ module.exports = function (grunt) {
         concurrent: {
             dist: [
                 'bower',
-                'coffee:dist',
                 'recess',
             ],
             test: [
-                'coffee:test'
             ],
             watch: [
                 'nodemon',
@@ -160,15 +109,20 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', [
         'concurrent:dist',
-        'copy:dist', // After Coffeescripts have been prepared
         'concurrent:watch'
     ]);
 
+    // Useful for allowing IDE to debug main application
+    grunt.registerTask('development', [
+        'concurrent:dist',
+        'watch'
+    ]);
+
     grunt.registerTask('test', [
-        'jshint',
+        'env:test',
         'concurrent:test',
-        'connect:test',
-        'mocha'
+        'mochaTest',
+        'jshint'
     ]);
 
     // Necessary for Heroku to enable rebuilding app folder
