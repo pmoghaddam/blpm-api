@@ -2,13 +2,11 @@
   "name": "BLPM-API",
   "version": "0.0.1",
   "private": true,
-  "scripts": {
-    "start": "node app.js"
-  },
   "dependencies": {
     "express": "3.4.6",
     "ejs": "*",
     "less-middleware": "*",
-    "mongoose": "3.8.1"
+    "mongoose": "3.8.1",
+    "underscore": "~1.5.2"
   }
 }
