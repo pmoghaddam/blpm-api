@@ -136,11 +136,12 @@ module.exports = function (grunt) {
         },
         concurrent: {
             dist: [
-                'coffee',
+                'bower',
+                'coffee:dist',
                 'recess',
             ],
             test: [
-                'coffee'
+                'coffee:test'
             ],
             watch: [
                 'nodemon',
@@ -148,6 +149,11 @@ module.exports = function (grunt) {
             ],
             options: {
                 logConcurrentOutput: true
+            }
+        },
+        bower: {
+            install: {
+                targetDir: './public/lib'
             }
         }
     });
@@ -165,5 +171,9 @@ module.exports = function (grunt) {
         'mocha'
     ]);
 
+    // Necessary for Heroku to enable rebuilding app folder
+    grunt.registerTask('build', [
+        'concurrent:dist'
+    ]);
 
 };

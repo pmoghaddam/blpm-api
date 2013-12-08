@@ -2,6 +2,11 @@
     "name": "BLPM-API",
     "version": "0.0.1",
     "private": true,
+    "scripts": {
+        "start": "node node_modules/grunt-cli/bin/grunt",
+        "test": "node node_modules/grunt-cli/bin/grunt test",
+        "postinstall": "node node_modules/grunt-cli/bin/grunt build"
+    },
     "dependencies": {
         "express": "3.4.6",
         "ejs": "*",
@@ -23,6 +28,7 @@
         "grunt-recess": "~0.3.5",
         "grunt-contrib-watch": "~0.5.3",
         "grunt-open": "~0.2.0",
-        "matchdep": "~0.1.2"
+        "matchdep": "~0.1.2",
+        "grunt-bower-task": "~0.3.4"
     }
 }
