@@ -26,6 +26,10 @@ module.exports = function (grunt) {
             options: {
                 spawn: false
             },
+            basic: {
+                files: ['<%= yeoman.src %>/**', '!*.coffee'],
+                tasks: ['copy:dist']
+            },
             coffee: {
                 files: ['<%= yeoman.src %>/{,*/}*.coffee'],
                 tasks: ['coffee:dist']
@@ -107,28 +111,51 @@ module.exports = function (grunt) {
                         cwd: '<%= yeoman.src %>',
                         dest: '<%= yeoman.app %>',
                         src: [
-                            '*.js'
+                            '**',
+                            '!*.coffee'
                         ]
                     }
                 ]
             }
         },
+        nodemon: {
+            dev: {
+                options: {
+                    file: 'server.js',
+                    args: [],
+                    ignoredFiles: ['README.md', 'node_modules/**', '.DS_Store'],
+                    watchedFolders: ['app'],
+                    debug: true,
+                    delayTime: 1,
+                    env: {
+                        PORT: 5000
+                    },
+                    cwd: __dirname
+                }
+            }
+        },
         concurrent: {
             dist: [
                 'coffee',
-                'recess'
+                'recess',
             ],
             test: [
                 'coffee'
-            ]
+            ],
+            watch: [
+                'nodemon',
+                'watch'
+            ],
+            options: {
+                logConcurrentOutput: true
+            }
         }
     });
 
     grunt.registerTask('default', [
         'concurrent:dist',
-        'copy',
-//        'recess',
-        'watch'
+        'copy:dist', // After Coffeescripts have been prepared
+        'concurrent:watch'
     ]);
 
     grunt.registerTask('test', [
@@ -137,5 +164,6 @@ module.exports = function (grunt) {
         'connect:test',
         'mocha'
     ]);
+
 
 };
