@@ -29,8 +29,7 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 //Bootstrap db connection
-var db = mongoose.connect(config.db);
-console.log(mongoose); // TODO: Temporary verification
+mongoose.connect(config.db);
 
 // development only
 if ('development' === config.env) {

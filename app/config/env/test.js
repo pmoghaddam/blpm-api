@@ -2,7 +2,7 @@
 
 module.exports = {
     db: process.env.MONGOLAB_URI || 'mongodb://localhost/blpm-test',
-    port: 3001,
+    port: 5001,
     app: {
         name: 'BLPM - Test'
     },
