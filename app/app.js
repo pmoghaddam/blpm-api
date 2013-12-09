@@ -9,11 +9,13 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var config = require('./config/config');
+var mongoose = require('mongoose');
 
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 5000);
+app.set('port', process.env.PORT || config.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -26,8 +28,12 @@ app.use(express.session());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
+//Bootstrap db connection
+var db = mongoose.connect(config.db);
+console.log(mongoose); // TODO: Temporary verification
+
 // development only
-if ('development' === app.get('env')) {
+if ('development' === config.env) {
     app.use(express.errorHandler());
 }
 

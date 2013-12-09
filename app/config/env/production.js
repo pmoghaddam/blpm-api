@@ -1,9 +1,9 @@
 'use strict';
 
 module.exports = {
-    db: 'mongodb://localhost/mean',
+    db: process.env.MONGOLAB_URI || 'mongodb://localhost/blpm-production',
     app: {
-        name: 'MEAN - A Modern Stack - Production'
+        name: 'BLPM - Production'
     },
     facebook: {
         clientID: 'APP_ID',

@@ -1,10 +1,10 @@
 'use strict';
 
 module.exports = {
-    db: 'mongodb://localhost/mean-test',
+    db: process.env.MONGOLAB_URI || 'mongodb://localhost/blpm-test',
     port: 3001,
     app: {
-        name: 'MEAN - A Modern Stack - Test'
+        name: 'BLPM - Test'
     },
     facebook: {
         clientID: 'APP_ID',
