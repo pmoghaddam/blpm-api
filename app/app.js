@@ -5,8 +5,6 @@
  */
 
 var express = require('express');
-var routes = require('./routes');
-var user = require('./routes/user');
 var config = require('./config/config');
 var mongoose = require('mongoose');
 
@@ -15,12 +13,11 @@ var app = express();
 // Configure express
 require('./config/express')(app);
 
+// Configure routes
+require('./config/routes')(app);
+
 // Bootstrap db connection
 mongoose.connect(config.db);
-
-// development only
-app.get('/', routes.index);
-app.get('/users', user.list);
 
 // Start application
 app.listen(config.port);

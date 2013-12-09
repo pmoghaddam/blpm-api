@@ -8,6 +8,7 @@ module.exports = {
     root: rootPath,
     rootPath: rootPath,
     viewPath: path.join(rootPath, 'app', 'views'),
+    appPath: path.join(rootPath, 'app'),
     port: process.env.PORT || 5000,
     db: process.env.MONGOHQ_URL
 };
