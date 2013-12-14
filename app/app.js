@@ -17,7 +17,7 @@ require('./config/express')(app);
 require('./config/routes')(app);
 
 // Bootstrap db connection
-mongoose.connect(config.db);
+mongoose.connect(config.db, config.dbOptions);
 
 // Start application
 app.listen(config.port);

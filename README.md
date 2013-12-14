@@ -32,6 +32,9 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * [X] Add MongoDB connection
 * [X] Store in remote Git repository
 * [X] Setup continuous delivery, that does integration, and finally packaging
+* [X] Add MongoDB to CI server? If complicated, utilize a SaaS
+    * [X] Utilize Cloudbee's MongoHQ
+* Extract Jenkins Configuration?
 * Add basic logging
 * Add extremely basic authentication (hard-code passwords if necessary)
     * Incorporate any other feature of MEAN skeleton that you found useful

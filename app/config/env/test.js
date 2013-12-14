@@ -2,6 +2,7 @@
 
 module.exports = {
     db: process.env.MONGOLAB_URI || 'mongodb://localhost/blpm-test',
+    dbOptions: { server: { socketOptions: { connectTimeoutMS: 5000 }}},
     port: 5001,
     app: {
         name: 'BLPM - Test'
