@@ -21,6 +21,9 @@ module.exports = function (grunt) {
         test: 'test'
     };
 
+    // Setup necessary directoryes
+    grunt.file.mkdir('./target');
+
     grunt.initConfig({
         yeoman: yeomanConfig,
         watch: {
@@ -43,10 +46,23 @@ module.exports = function (grunt) {
             ]
         },
         mochaTest: {
-            options: {
-                reporter: 'spec'
+            test: {
+                options: {
+                    reporter: 'spec'
+                },
+                src: ['test/**/*.js']
             },
-            src: ['test/**/*.js']
+            coverage: {
+                options: {
+                    reporter: 'html-cov',
+                    // use the quiet flag to suppress the mocha console output
+                    quiet: true,
+                    // specify a destination file to capture the mocha
+                    // output (the quiet option does not suppress this)
+                    captureFile: './target/coverage.html'
+                },
+                src: ['test/**/*.js']
+            }
         },
         env: {
             test: {
@@ -90,8 +106,6 @@ module.exports = function (grunt) {
                 'bower',
                 'recess',
             ],
-            test: [
-            ],
             watch: [
                 'nodemon',
                 'watch'
@@ -120,8 +134,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'env:test',
-        'concurrent:test',
-        'mochaTest',
+        'mochaTest:test',
+        'mochaTest:coverage',
         'jshint'
     ]);
 

@@ -29,7 +29,16 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * [X] Setup Grunt
 * [X] Add Nodemon
 * [X] Setup Testing
-* Add MongoDB connection
+* [X] Add MongoDB connection
+* [X] Store in remote Git repository
+* [X] Setup continuous delivery, that does integration, and finally packaging
+* Add basic logging
+* Add extremely basic authentication (hard-code passwords if necessary)
+    * Incorporate any other feature of MEAN skeleton that you found useful
+* Add a task model with MongoDB to start testing RESTful endpoint storage
+    * Add basic tests
+* Provide a basic connection between Chrome extension and this API
+* Add API versioning
 * Incorporate effective MEAN skeleton structure into application
 
 # Lessons Learnt
