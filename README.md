@@ -4,7 +4,7 @@ API layer of BLPM application.
 # Quick Start
 
     # Install NPM modules, Bower packages, and any post-compilation
-    npm install
+    npm install && bower install
 
     # Start server and watch folders for development
     grunt
@@ -34,15 +34,21 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * [X] Setup continuous delivery, that does integration, and finally packaging
 * [X] Add MongoDB to CI server? If complicated, utilize a SaaS
     * [X] Utilize Cloudbee's MongoHQ
-* Extract Jenkins Configuration?
-* Add basic logging
-* Add extremely basic authentication (hard-code passwords if necessary)
-    * Incorporate any other feature of MEAN skeleton that you found useful
+* [X] Extract Jenkins Configuration?
+* Simple Yeoman web-app application served with Node
+    * http://stackoverflow.com/questions/10434001/static-files-with-express-js
 * Add a task model with MongoDB to start testing RESTful endpoint storage
     * Add basic tests
-* Provide a basic connection between Chrome extension and this API
 * Add API versioning
+* Add extremely basic authentication (hard-code passwords if necessary)
+    * Incorporate any other feature of MEAN skeleton that you found useful
+* Provide a basic connection between Chrome extension and this API
 * Incorporate effective MEAN skeleton structure into application
+* Add basic logging
+
+
+## Lower Priority
+* Node migrate but for Mongoose?
 
 # Lessons Learnt
 * CoffeeScript

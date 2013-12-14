@@ -103,7 +103,6 @@ module.exports = function (grunt) {
         },
         concurrent: {
             dist: [
-                'bower',
                 'recess',
             ],
             watch: [
@@ -112,11 +111,6 @@ module.exports = function (grunt) {
             ],
             options: {
                 logConcurrentOutput: true
-            }
-        },
-        bower: {
-            install: {
-                targetDir: './public/lib'
             }
         }
     });
