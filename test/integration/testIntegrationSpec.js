@@ -1,7 +1,5 @@
 'use strict';
 
-require('../../server');
-
 var request = require('request');
 var url = 'http://localhost:' + 5001;
 var mongoose = require('mongoose');

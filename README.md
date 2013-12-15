@@ -35,10 +35,10 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * [X] Add MongoDB to CI server? If complicated, utilize a SaaS
     * [X] Utilize Cloudbee's MongoHQ
 * [X] Extract Jenkins Configuration?
-* Simple Yeoman web-app application served with Node
-    * http://stackoverflow.com/questions/10434001/static-files-with-express-js
-* Add a task model with MongoDB to start testing RESTful endpoint storage
-    * Add basic tests
+* [X] Simple Yeoman web-app application served with Node
+* [X] Add a task model with MongoDB to start testing RESTful endpoint storage
+    * [X] Add basic tests
+* Setup continuous testing "watch"
 * Add API versioning
 * Add extremely basic authentication (hard-code passwords if necessary)
     * Incorporate any other feature of MEAN skeleton that you found useful
