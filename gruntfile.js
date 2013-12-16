@@ -33,6 +33,10 @@ module.exports = function (grunt) {
             recess: {
                 files: ['<%= yeoman.src %>/public/{,*/}*.less'],
                 tasks: ['recess']
+            },
+            test: {
+                files: ['<%= yeoman.app %>/**/*.js', '<%= yeoman.test %>/**/*.js'],
+                tasks: ['test']
             }
         },
         jshint: {
@@ -129,8 +133,13 @@ module.exports = function (grunt) {
     grunt.registerTask('test', [
         'env:test',
         'mochaTest:test',
-        'mochaTest:coverage',
+//        'mochaTest:coverage',
         'jshint'
+    ]);
+
+    grunt.registerTask('test:watch', [
+        'test',
+        'watch:test'
     ]);
 
     // Necessary for Heroku to enable rebuilding app folder

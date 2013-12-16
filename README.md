@@ -38,7 +38,8 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * [X] Simple Yeoman web-app application served with Node
 * [X] Add a task model with MongoDB to start testing RESTful endpoint storage
     * [X] Add basic tests
-* Add API versioning
+* [X] Add API versioning
+* [X] Setup continuous testing "watch"
 * Setup basic WebSocket communication as well
     * Essentially, RESTful and WebSocket connection for flexible API
 * Understand how to create effective API
@@ -50,7 +51,6 @@ should be made to keep these two layers coded modularly for a future inevitable 
 
 
 ## Lower Priority
-* Setup continuous testing "watch"
 * Node migrate but for Mongoose?
 
 # Lessons Learnt
