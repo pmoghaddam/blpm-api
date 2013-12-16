@@ -1,6 +1,6 @@
 'use strict';
 
-var task = rekuire.listener('task');
+var task = rekuire.message('task');
 
 /**
  * Convenient listener for playback events
@@ -21,4 +21,5 @@ exports.socketListeners = function (socket) {
 
     // Request events
     request(socket, 'tasks:list', task.list);
+    request(socket, 'tasks:create', task.create);
 };

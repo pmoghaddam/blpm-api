@@ -2,7 +2,7 @@
 
 var socketio = require('socket.io');
 var config = require('./config');
-var dispatcher = require('./dispatcher');
+var dispatcher = require('./listeners');
 var events = require('./events');
 var io;
 
