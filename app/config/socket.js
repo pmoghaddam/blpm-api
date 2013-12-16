@@ -3,7 +3,7 @@
 var socketio = require('socket.io');
 var config = require('./config');
 
-module.exports = function(app, server) {
+module.exports = function (app, server) {
     var io = socketio.listen(server);
 
     // Set configuration values

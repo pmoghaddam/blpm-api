@@ -12,7 +12,7 @@ var http = require('http');
 var app = express();
 
 // Set server
-var server  = http.createServer(app);
+var server = http.createServer(app);
 
 // Configure express
 require('./config/express')(app);

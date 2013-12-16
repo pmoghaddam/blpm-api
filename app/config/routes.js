@@ -5,7 +5,7 @@ var routes = require(config.appPath + '/controllers');
 var user = require(config.appPath + '/controllers/user');
 var task = require(config.appPath + '/controllers/task');
 
-module.exports = function(app) {
+module.exports = function (app) {
     var version = '/v0';
 
     app.get(version + '/', routes.index);
