@@ -7,6 +7,9 @@ module.exports = {
     app: {
         name: 'BLPM - Test'
     },
+    io: {
+        'log level': 1
+    },
     facebook: {
         clientID: 'APP_ID',
         clientSecret: 'APP_SECRET',
