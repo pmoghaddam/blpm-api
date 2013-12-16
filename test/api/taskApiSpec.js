@@ -1,8 +1,15 @@
 'use strict';
 
 var request = require('request');
-var url = 'http://localhost:5001/v0';
+var url = 'http://localhost:5001';
+var versionedUrl = url + '/v0';
 var Task = require('../../app/models/task'); // TODO: Improve relative paths
+
+var io = require('socket.io-client');
+var options = {
+    transports: ['websocket'],
+    'force new connection': true
+};
 
 // Globals
 var task;
@@ -20,8 +27,8 @@ describe('Task model', function () {
         task.save();
     });
 
-    it('should get all tasks', function (done) {
-        request(url + '/tasks', function (error, response) {
+    it('should get all tasks (RESTful)', function (done) {
+        request(versionedUrl + '/tasks', function (error, response) {
             var tasks = JSON.parse(response.body);
             assert(tasks.length === 1);
             assert(tasks[0].title === 'Sample Task');
@@ -29,8 +36,18 @@ describe('Task model', function () {
         });
     });
 
+    it('should get all tasks (Socket)', function (done) {
+        var client = io.connect(url, options);
+        client.on('v0/tasks/list', function(tasks) {
+            assert(tasks.length === 1);
+            assert(tasks[0].title === 'Sample Task');
+            done();
+        });
+        client.emit('v0/tasks/list');
+    });
+
     it('should create task', function (done) {
-        request.post(url + '/tasks', {form: {title: 'Test Title'}},
+        request.post(versionedUrl + '/tasks', {form: {title: 'Test Title'}},
             function (error, response) {
                 var task = JSON.parse(response.body);
                 assert(task.title === 'Test Title');
@@ -39,7 +56,7 @@ describe('Task model', function () {
     });
 
     it('should get a single task', function (done) {
-        request.get(url + '/tasks/' + task.id, function (error, response) {
+        request.get(versionedUrl + '/tasks/' + task.id, function (error, response) {
             var task = JSON.parse(response.body);
             assert(task.title === 'Sample Task');
             done();
@@ -47,7 +64,7 @@ describe('Task model', function () {
     });
 
     it('should update a single task', function (done) {
-        request.put(url + '/tasks/' + task.id, {form: {title: 'Updated title'}},
+        request.put(versionedUrl + '/tasks/' + task.id, {form: {title: 'Updated title'}},
             function (error, response) {
                 var task = JSON.parse(response.body);
                 assert(task.title === 'Updated title');
@@ -57,7 +74,7 @@ describe('Task model', function () {
 
     it('should delete a single task', function (done) {
         var id = task.id;
-        request.del(url + '/tasks/' + id, function (error, response) {
+        request.del(versionedUrl + '/tasks/' + id, function (error, response) {
             assert(response.statusCode === 200);
             Task.find({ _id: id}).count().exec(function (err, count) {
                 assert(count === 0);

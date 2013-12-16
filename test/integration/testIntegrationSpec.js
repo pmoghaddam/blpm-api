@@ -37,10 +37,10 @@ describe('Basic integration test', function () {
     it('should connect to Socket.IO', function (done) {
         var client = io.connect(url, options);
 
-        client.on('news', function (data) {
-            assert(data.hello === 'world');
-            done();
+        client.on('connected', function (data) {
+            assert.ok(data.connected);
             client.disconnect();
+            done();
         });
     });
 });

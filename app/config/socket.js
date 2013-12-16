@@ -11,10 +11,6 @@ module.exports = function (app, server) {
         io.set(key, config.io[key]);
     }
 
-    io.sockets.on('connection', function (socket) {
-        socket.emit('news', { hello: 'world' });
-        socket.on('my other event', function (data) {
-            console.log(data);
-        });
-    });
+    // Set event listeners
+    io.sockets.on('connection', require('./events'));
 };
