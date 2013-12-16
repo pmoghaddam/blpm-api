@@ -25,5 +25,18 @@ taskSchema.path('title').validate(function (title) {
     return title && title.length;
 }, 'Title cannot be blank');
 
+/**
+ * Statics
+ */
+taskSchema.statics = {
+    all: function (cb) {
+        this.find().sort('-created').exec(cb);
+    },
+    findById: function (id, cb) {
+        this.findOne({
+            _id: id
+        }).exec(cb);
+    }
+}
 
 module.exports = mongoose.model('Task', taskSchema);

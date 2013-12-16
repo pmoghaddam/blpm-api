@@ -38,8 +38,10 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * [X] Simple Yeoman web-app application served with Node
 * [X] Add a task model with MongoDB to start testing RESTful endpoint storage
     * [X] Add basic tests
-* Setup continuous testing "watch"
 * Add API versioning
+* Setup basic WebSocket communication as well
+    * Essentially, RESTful and WebSocket connection for flexible API
+* Understand how to create effective API
 * Add extremely basic authentication (hard-code passwords if necessary)
     * Incorporate any other feature of MEAN skeleton that you found useful
 * Provide a basic connection between Chrome extension and this API
@@ -48,6 +50,7 @@ should be made to keep these two layers coded modularly for a future inevitable 
 
 
 ## Lower Priority
+* Setup continuous testing "watch"
 * Node migrate but for Mongoose?
 
 # Lessons Learnt
