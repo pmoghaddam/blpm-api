@@ -2,7 +2,7 @@
 
 require('../testHelper');
 var request = require('request');
-var url = 'http://localhost:5001';
+var url = 'http://127.0.0.1:5001';
 var Task = rekuire.model('task');
 
 var io = require('socket.io-client');

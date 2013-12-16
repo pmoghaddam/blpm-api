@@ -3,7 +3,7 @@
 require('../testHelper');
 
 var request = require('request');
-var url = 'http://localhost:5001';
+var url = 'http://127.0.0.1:5001';
 var versionedUrl = url + '/v0';
 var Task = rekuire.model('task');
 
