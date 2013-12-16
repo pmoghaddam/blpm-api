@@ -6,11 +6,13 @@ var user = require(config.appPath + '/controllers/user');
 var task = require(config.appPath + '/controllers/task');
 
 module.exports = function(app) {
-    app.get('/', routes.index);
-    app.get('/users', user.list);
-    app.get('/tasks', task.list);
-    app.post('/tasks', task.create);
-    app.get('/tasks/:id', task.show);
-    app.put('/tasks/:id', task.update);
-    app.del('/tasks/:id', task.delete);
+    var version = '/v0';
+
+    app.get(version + '/', routes.index);
+    app.get(version + '/users', user.list);
+    app.get(version + '/tasks', task.list);
+    app.post(version + '/tasks', task.create);
+    app.get(version + '/tasks/:id', task.show);
+    app.put(version + '/tasks/:id', task.update);
+    app.del(version + '/tasks/:id', task.delete);
 };

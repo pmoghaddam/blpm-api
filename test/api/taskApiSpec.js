@@ -1,7 +1,7 @@
 'use strict';
 
 var request = require('request');
-var url = 'http://localhost:' + 5001;
+var url = 'http://localhost:5001/v0';
 var Task = require('../../app/models/task'); // TODO: Improve relative paths
 
 // Globals

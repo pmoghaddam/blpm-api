@@ -37,6 +37,6 @@ taskSchema.statics = {
             _id: id
         }).exec(cb);
     }
-}
+};
 
 module.exports = mongoose.model('Task', taskSchema);
