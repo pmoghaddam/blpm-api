@@ -1,6 +1,6 @@
 'use strict';
 
-var Task = require('../models/task');
+var Task = rekuire.model('task');
 var _ = require('underscore');
 
 exports.list = function (req, res) {

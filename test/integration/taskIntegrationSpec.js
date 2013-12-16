@@ -1,7 +1,7 @@
 'use strict';
 
-var Task = require('../../app/models/task'); // TODO: Improve relative paths
-
+require('../testHelper');
+var Task = rekuire.model('task');
 
 // Test globals
 var task;

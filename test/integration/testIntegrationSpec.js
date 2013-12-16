@@ -1,8 +1,11 @@
 'use strict';
 
+require('../testHelper');
+
 var request = require('request');
 var url = 'http://localhost:' + 5001;
 var mongoose = require('mongoose');
+var dispatcher = rekuire.lib('dispatcher');
 var io = require('socket.io-client');
 var options = {
     transports: ['websocket'],
@@ -42,6 +45,15 @@ describe('Basic integration test', function () {
             client.disconnect();
             done();
         });
+    });
+
+    it('should connect to application event dispatcher', function (done) {
+        var fn = function () {
+            dispatcher.removeListener('test', fn);
+            done();
+        };
+        dispatcher.on('test', fn);
+        dispatcher.emit('test');
     });
 });
 

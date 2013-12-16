@@ -40,9 +40,9 @@ should be made to keep these two layers coded modularly for a future inevitable 
     * [X] Add basic tests
 * [X] Add API versioning
 * [X] Setup continuous testing "watch"
-* Setup basic WebSocket communication as well
-    * Essentially, RESTful and WebSocket connection for flexible API
-* Understand how to create effective API
+* [X] Setup basic WebSocket communication as well
+    * [X] Essentially, RESTful and WebSocket connection for flexible API
+* [X] Investigate "TODOs" in the code and resolve them
 * Add extremely basic authentication (hard-code passwords if necessary)
     * Incorporate any other feature of MEAN skeleton that you found useful
 * Provide a basic connection between Chrome extension and this API
@@ -51,6 +51,7 @@ should be made to keep these two layers coded modularly for a future inevitable 
 
 
 ## Lower Priority
+* Understand how to create effective API
 * Node migrate but for Mongoose?
 
 # Lessons Learnt

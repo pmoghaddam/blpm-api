@@ -1,20 +1,16 @@
 'use strict';
 
+require('../testHelper');
+
 var request = require('request');
 var url = 'http://localhost:5001';
 var versionedUrl = url + '/v0';
-var Task = require('../../app/models/task'); // TODO: Improve relative paths
-
-var io = require('socket.io-client');
-var options = {
-    transports: ['websocket'],
-    'force new connection': true
-};
+var Task = rekuire.model('task');
 
 // Globals
 var task;
 
-describe('Task model', function () {
+describe('Task API', function () {
     before(function () {
         Task.remove().exec();
     });
@@ -27,23 +23,13 @@ describe('Task model', function () {
         task.save();
     });
 
-    it('should get all tasks (RESTful)', function (done) {
+    it('should get all tasks', function (done) {
         request(versionedUrl + '/tasks', function (error, response) {
             var tasks = JSON.parse(response.body);
             assert(tasks.length === 1);
             assert(tasks[0].title === 'Sample Task');
             done();
         });
-    });
-
-    it('should get all tasks (Socket)', function (done) {
-        var client = io.connect(url, options);
-        client.on('v0/tasks/list', function(tasks) {
-            assert(tasks.length === 1);
-            assert(tasks[0].title === 'Sample Task');
-            done();
-        });
-        client.emit('v0/tasks/list');
     });
 
     it('should create task', function (done) {

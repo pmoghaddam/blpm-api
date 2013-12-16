@@ -2,9 +2,16 @@
 
 var socketio = require('socket.io');
 var config = require('./config');
+var dispatcher = require('./dispatcher');
+var events = require('./events');
+var io;
 
-module.exports = function (app, server) {
-    var io = socketio.listen(server);
+exports.getSocket = function () {
+    return io;
+};
+
+exports.createSocket = function (app, server) {
+    io = socketio.listen(server);
 
     // Set configuration values
     for (var key in config.io) {
@@ -12,5 +19,8 @@ module.exports = function (app, server) {
     }
 
     // Set event listeners
-    io.sockets.on('connection', require('./events'));
+    dispatcher.dispatchListeners(); // Global events
+    io.sockets.on('connection', events.socketListeners); // Socket events
+
+    return io;
 };

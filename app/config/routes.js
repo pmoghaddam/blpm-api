@@ -1,9 +1,8 @@
 'use strict';
 
-var config = require('./config');
-var routes = require(config.appPath + '/controllers');
-var user = require(config.appPath + '/controllers/user');
-var task = require(config.appPath + '/controllers/task');
+var routes = rekuire.controller('index');
+var user = rekuire.controller('user');
+var task = rekuire.controller('task');
 
 module.exports = function (app) {
     var version = '/v0';

@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var dispatcher = rekuire.lib('dispatcher');
 
 /**
  * Schema
@@ -38,5 +39,10 @@ taskSchema.statics = {
         }).exec(cb);
     }
 };
+
+// TODO: Extract this functionality outside
+taskSchema.post('save', function (task) {
+    dispatcher.emit('tasks:create', task.toObject());
+});
 
 module.exports = mongoose.model('Task', taskSchema);
