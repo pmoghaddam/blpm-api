@@ -10,6 +10,7 @@ module.exports = function(app) {
 
     app.get(version + '/', routes.index);
     app.get(version + '/users', user.list);
+
     app.get(version + '/tasks', task.list);
     app.post(version + '/tasks', task.create);
     app.get(version + '/tasks/:id', task.show);

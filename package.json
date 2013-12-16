@@ -26,6 +26,8 @@
     "grunt-mocha-test": "~0.8.1",
     "chai": "~1.8.1",
     "mocha": "~1.15.1",
-    "grunt-notify": "~0.2.16"
+    "grunt-notify": "~0.2.16",
+    "socket.io-client": "~0.9.16",
+    "socket.io": "~0.9.16"
   }
 }
