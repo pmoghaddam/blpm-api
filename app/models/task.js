@@ -44,5 +44,8 @@ taskSchema.statics = {
 taskSchema.post('save', function (task) {
     dispatcher.emit('tasks:create', task.toObject());
 });
+taskSchema.post('remove', function (task) {
+    dispatcher.emit('tasks:delete', task.toObject());
+});
 
 module.exports = mongoose.model('Task', taskSchema);

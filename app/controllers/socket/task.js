@@ -21,3 +21,9 @@ exports.create = function (data) {
     var task = new Task(data);
     task.save();
 };
+
+exports.delete = function (data) {
+    Task.findById(data.id, function (err, task) {
+        task.remove();
+    });
+};
