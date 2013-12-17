@@ -1,14 +1,9 @@
 'use strict';
 
-var routes = rekuire.controller('index');
-var user = rekuire.controller('user');
-var task = rekuire.controller('task');
+var task = rekuire.apiController('task');
 
 module.exports = function (app) {
     var version = '/v0';
-
-    app.get(version + '/', routes.index);
-    app.get(version + '/users', user.list);
 
     app.get(version + '/tasks', task.list);
     app.post(version + '/tasks', task.create);

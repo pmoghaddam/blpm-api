@@ -43,7 +43,8 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * [X] Setup basic WebSocket communication as well
     * [X] Essentially, RESTful and WebSocket connection for flexible API
 * [X] Investigate "TODOs" in the code and resolve them
-* Improve semantic naming of "messages" and "listeners" - Not intuitive
+* [X] Confirm WebSocket with Heroku use, otherwise switch to long-polling
+* [X] Improve semantic naming of "messages" and "listeners" - Not intuitive
 * Add more tests
 * Add extremely basic authentication (hard-code passwords if necessary)
     * Incorporate any other feature of MEAN skeleton that you found useful

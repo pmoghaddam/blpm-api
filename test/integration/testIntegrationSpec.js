@@ -13,6 +13,7 @@ var options = {
 };
 
 describe('Basic integration test', function () {
+    // TODO: Test is broken, response is actually 404, fix this
     it('should contact server', function (done) {
         request(url, function (error, response) {
             assert.ok(response);

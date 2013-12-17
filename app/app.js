@@ -22,10 +22,20 @@ var server = http.createServer(app);
 rekuire.config('express')(app);
 
 // Configure socket.io
-rekuire.config('socket').createSocket(app, server);
+var io = rekuire.config('socket').createSocket(app, server);
 
-// Configure routes
-rekuire.config('routes')(app);
+// Configure socket listeners
+rekuire.route('socket')(io);
+
+// Configure api routes
+rekuire.route('api')(app);
+
+// Configure internal listeners
+rekuire.route('internal')();
+
+// Configure other routes (possibly with views)
+rekuire.route('routes')(app);
+
 
 // Bootstrap db connection
 mongoose.connect(config.db, config.dbOptions);

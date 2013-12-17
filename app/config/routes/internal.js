@@ -1,9 +1,9 @@
 'use strict';
 
-var task = rekuire.listener('task');
+var task = rekuire.internalController('task');
 var dispatcher = rekuire.lib('dispatcher');
 
 // Notification events
-exports.dispatchListeners = function () {
+module.exports = function () {
     dispatcher.on('tasks:create', task.create);
 };
