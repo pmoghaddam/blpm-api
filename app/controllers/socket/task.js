@@ -1,12 +1,12 @@
 'use strict';
 
-var Task = rekuire.model('task');
+var taskService = rekuire.service('task');
 
 /**
  * Two-way message
  */
 exports.list = function (data, respond) {
-    Task.all(function (err, tasks) {
+    taskService.list().then(function (tasks) {
         var tasksLean = tasks.map(function (task) {
             return task.toObject();
         });
@@ -18,12 +18,9 @@ exports.list = function (data, respond) {
  * One-way message
  */
 exports.create = function (data) {
-    var task = new Task(data);
-    task.save();
+    taskService.create(data);
 };
 
 exports.delete = function (data) {
-    Task.findById(data.id, function (err, task) {
-        task.remove();
-    });
+    taskService.delete(data.id);
 };

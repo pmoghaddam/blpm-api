@@ -45,7 +45,13 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * [X] Investigate "TODOs" in the code and resolve them
 * [X] Confirm WebSocket with Heroku use, otherwise switch to long-polling
 * [X] Improve semantic naming of "messages" and "listeners" - Not intuitive
+* [X] Add "services" folder
+    * [X] Services should emit the internal events
+    * [X] Services should be promises, or at least something that takes "success" or "fail" callbacks
+        * [X] Callbacks will be used by API calls while maybe by socket calls
+* Update README to capture architecture (and ideas so they are not lost)
 * Add more tests
+    * For services; confirm service errors being thrown are correct
 * Add extremely basic authentication (hard-code passwords if necessary)
     * Incorporate any other feature of MEAN skeleton that you found useful
 * Provide a basic connection between Chrome extension and this API
