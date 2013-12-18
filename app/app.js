@@ -30,9 +30,6 @@ rekuire.route('socket')(io);
 // Configure api routes
 rekuire.route('api')(app);
 
-// Configure internal listeners
-rekuire.route('internal')();
-
 // Configure other routes (possibly with views)
 rekuire.route('routes')(app);
 
