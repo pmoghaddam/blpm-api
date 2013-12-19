@@ -49,19 +49,28 @@ should be made to keep these two layers coded modularly for a future inevitable 
     * [X] Services should emit the internal events
     * [X] Services should be promises, or at least something that takes "success" or "fail" callbacks
         * [X] Callbacks will be used by API calls while maybe by socket calls
-* Update README to capture architecture (and ideas so they are not lost)
-* Add more tests
-    * For services; confirm service errors being thrown are correct
+* [X] Add application monitoring
 * Add extremely basic authentication (hard-code passwords if necessary)
     * Incorporate any other feature of MEAN skeleton that you found useful
+* Add logging strategy
+* Add analytics gathering strategy
+* Add more tests
+    * For services; confirm service errors being thrown are correct
 * Provide a basic connection between Chrome extension and this API
 * Incorporate effective MEAN skeleton structure into application
 * Figure out how to scale websocket connections
 
-## Lower Priority
+## Tasks - Lower Priority
+* Update README to capture architecture (and ideas so they are not lost)
 * Add basic logging, and setup a plan on how to use them
 * Understand how to create effective API
 * Node migrate but for Mongoose?
+
+## Tasks - Infrastructure
+In the future, if you wish to leave PaaS and go towards IaaS, the following may need to be done:
+
+* Scale Socket.IO
+    * https://github.com/markap/socket.io-scale
 
 # Lessons Learnt
 * CoffeeScript

@@ -1,6 +1,14 @@
 'use strict';
 
 /**
+ * Setup application monitoring for production only
+ */
+if ('production' === process.env.NODE_ENV) {
+    require('newrelic');
+}
+
+
+/**
  * Global helper for require
  */
 global.rekuire = require('../lib/rekuire');
@@ -9,7 +17,7 @@ global.rekuire = require('../lib/rekuire');
  * Module dependencies.
  */
 var express = require('express');
-var config = rekuire.fromApp('config/config');
+var config = rekuire.config('config');
 var mongoose = require('mongoose');
 var http = require('http');
 
