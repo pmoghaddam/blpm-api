@@ -20,14 +20,18 @@ var express = require('express');
 var config = rekuire.config('config');
 var mongoose = require('mongoose');
 var http = require('http');
+var passport = require('passport');
 
 var app = express();
 
 // Set server
 var server = http.createServer(app);
 
+// Configure passport (security)
+rekuire.config('passport')(passport);
+
 // Configure express
-rekuire.config('express')(app);
+rekuire.config('express')(app, passport);
 
 // Configure socket.io
 var io = rekuire.config('socket').createSocket(app, server);
@@ -36,7 +40,7 @@ var io = rekuire.config('socket').createSocket(app, server);
 rekuire.route('socket')(io);
 
 // Configure api routes
-rekuire.route('api')(app);
+rekuire.route('api')(app, passport);
 
 // Configure other routes (possibly with views)
 rekuire.route('routes')(app);

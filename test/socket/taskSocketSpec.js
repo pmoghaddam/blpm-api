@@ -1,7 +1,8 @@
 'use strict';
 
 require('../testHelper');
-var request = require('request');
+
+var request = require('superagent');
 var url = 'http://127.0.0.1:5001';
 var Task = rekuire.model('task');
 
@@ -16,15 +17,19 @@ var task;
 var client;
 
 describe('Task Socket', function () {
-    before(function () {
-        Task.remove().exec();
+    before(function (done) {
+        Task.remove().exec(function () {
+            done();
+        });
     });
 
-    beforeEach(function () {
+    beforeEach(function (done) {
         task = new Task({
             title: 'Sample Task'
         });
-        task.save();
+        task.save(function () {
+            done();
+        });
         client = io.connect(url, options);
     });
 
@@ -43,13 +48,17 @@ describe('Task Socket', function () {
             done();
         });
 
-        client.on('connect', function() {
-            request.post(url + '/v0/tasks', {form: {title: 'Socket Title'}});
+        client.on('connect', function () {
+            request.post(url + '/v0/tasks')
+                .sendWithToken({title: 'Socket Title'})
+                .end();
         });
     });
 
-    afterEach(function () {
-        Task.remove().exec();
+    afterEach(function (done) {
+        Task.remove().exec(function () {
+            done();
+        });
         client.disconnect();
     });
 });

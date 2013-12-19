@@ -50,21 +50,27 @@ should be made to keep these two layers coded modularly for a future inevitable 
     * [X] Services should be promises, or at least something that takes "success" or "fail" callbacks
         * [X] Callbacks will be used by API calls while maybe by socket calls
 * [X] Add application monitoring
-* Add extremely basic authentication (hard-code passwords if necessary)
-    * Incorporate any other feature of MEAN skeleton that you found useful
-* Add logging strategy
-* Add analytics gathering strategy
+* [X] Add extremely basic authentication (hard-code passwords if necessary)
+* Add Socket.IO authentication as well
 * Add more tests
     * For services; confirm service errors being thrown are correct
+    * Add socket API tests
+    * Add authentication tests
 * Provide a basic connection between Chrome extension and this API
 * Incorporate effective MEAN skeleton structure into application
 * Figure out how to scale websocket connections
 
 ## Tasks - Lower Priority
+* Add other authorization strategies
 * Update README to capture architecture (and ideas so they are not lost)
 * Add basic logging, and setup a plan on how to use them
 * Understand how to create effective API
 * Node migrate but for Mongoose?
+* Last resort error handler
+* API compression / optimization
+* Add logging strategy
+    * Incorporate any other feature of MEAN skeleton that you found useful
+* Add analytics gathering strategy
 
 ## Tasks - Infrastructure
 In the future, if you wish to leave PaaS and go towards IaaS, the following may need to be done:
@@ -77,3 +83,5 @@ In the future, if you wish to leave PaaS and go towards IaaS, the following may 
     * It will complicate your folder structure. You need to figure out how to mix-and-match JS & CoffeeScript files
     * It will be complicated to debug (if at all) with an IDE
     * For tests, there is little benefit
+* APIs do not need session support due to stateless calls
+* Socket.IOs do need session support since connection persists
