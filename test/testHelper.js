@@ -11,8 +11,9 @@ require('../server');
 /**
  * Seed database
  */
-// Remove all users
 var User = rekuire.model('user');
+
+// Remove all users
 User.remove().exec();
 
 // Create test user
@@ -38,7 +39,31 @@ request.Request.prototype.sendWithToken = function (data) {
     return this.send(merged);
 };
 
+// Read session ID from agent
+var cookie = require('express/node_modules/cookie'),
+    parseSignedCookie = require('express/node_modules/connect').utils.parseSignedCookie;
+
+var agent = request.agent();
+agent.post('http://localhost:5001/v0/session')
+    .send({username: 'user', password: 'password'})
+    .end(function (err, res) {
+
+        var cookies = cookie.parse(res.headers['set-cookie'][0]);
+        var signed = cookies['express.sid']; // TODO: Utilize config
+
+        var sessionId = parseSignedCookie(signed, '6d7b84cf448d'); // TODO: Utilize config
+
+        // Update exports
+        exports.sessionId = sessionId;
+        exports.ioOptions.query = 'session_id=' + sessionId;
+    });
+
 /**
  * Expose
  */
-exports.USER = user;
+exports.url = 'http://localhost:' + 5001;
+exports.authorizedAgent = agent;
+exports.ioOptions = {
+    transports: ['websocket'],
+    'force new connection': true
+};

@@ -1,19 +1,14 @@
 'use strict';
 
-require('../testHelper');
-
-var request = require('request');
-var url = 'http://localhost:' + 5001;
+var helper = require('../testHelper');
+var request = require('superagent');
+var url = helper.url;
 var mongoose = require('mongoose');
 var dispatcher = rekuire.lib('dispatcher');
 var io = require('socket.io-client');
-var options = {
-    transports: ['websocket'],
-    'force new connection': true
-};
+
 
 describe('Basic integration test', function () {
-    // TODO: Test is broken, response is actually 404, fix this
     it('should contact server', function (done) {
         request(url, function (error, response) {
             assert.ok(response);
@@ -38,15 +33,19 @@ describe('Basic integration test', function () {
         }
     });
 
-    it('should connect to Socket.IO', function (done) {
-        var client = io.connect(url, options);
+    describe('authenticated', function () {
 
-        client.on('connected', function (data) {
-            assert.ok(data.connected);
-            client.disconnect();
-            done();
+        it('should connect to Socket.IO (with authentication)', function (done) {
+            var client = io.connect(url, helper.ioOptions);
+
+            client.on('connected', function (data) {
+                assert.ok(data.connected);
+                client.disconnect();
+                done();
+            });
         });
     });
+
 
     it('should connect to application event dispatcher', function (done) {
         var fn = function () {

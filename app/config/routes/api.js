@@ -1,6 +1,7 @@
 'use strict';
 
 var task = rekuire.apiController('task');
+var session = rekuire.apiController('session');
 
 module.exports = function (app, passport) {
     var version = '/v0';
@@ -11,4 +12,7 @@ module.exports = function (app, passport) {
     app.get(version + '/tasks/:id', authenticate, task.show);
     app.put(version + '/tasks/:id', authenticate, task.update);
     app.del(version + '/tasks/:id', authenticate, task.delete);
+
+    // Authentication for session-based connections
+    app.post(version + '/session', passport.authenticate('local'), session.session);
 };

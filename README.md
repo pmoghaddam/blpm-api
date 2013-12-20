@@ -51,8 +51,17 @@ should be made to keep these two layers coded modularly for a future inevitable 
         * [X] Callbacks will be used by API calls while maybe by socket calls
 * [X] Add application monitoring
 * [X] Add extremely basic authentication (hard-code passwords if necessary)
-* Add Socket.IO authentication as well
+* [X] Add Socket.IO authentication as well
+    * [X] Concept: after a session is setup and stored in cookie, Socket.IO simply needs
+    to verify the session ID to be real. That's all tha is required. As such, we will
+    need to bring back sessions and local strategy to achieve this.
+    * [X] https://github.com/LearnBoost/socket.io/wiki/Authorizing
+    * [X] Refer to passportjs-socket.io
+* Resolve "TODOs"
+* Update README to capture architecture (and ideas so they are not lost)
+* Begin creating simple UI
 * Add more tests
+    * Clean database completely (includes removing all session objects)
     * For services; confirm service errors being thrown are correct
     * Add socket API tests
     * Add authentication tests
@@ -60,9 +69,10 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * Incorporate effective MEAN skeleton structure into application
 * Figure out how to scale websocket connections
 
+
 ## Tasks - Lower Priority
 * Add other authorization strategies
-* Update README to capture architecture (and ideas so they are not lost)
+* Improve token authentication to expire and not last forever
 * Add basic logging, and setup a plan on how to use them
 * Understand how to create effective API
 * Node migrate but for Mongoose?

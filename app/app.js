@@ -19,6 +19,7 @@ global.rekuire = require('../lib/rekuire');
 var express = require('express');
 var config = rekuire.config('config');
 var mongoose = require('mongoose');
+var mongoStore = require('connect-mongo')(express);
 var http = require('http');
 var passport = require('passport');
 
@@ -30,11 +31,18 @@ var server = http.createServer(app);
 // Configure passport (security)
 rekuire.config('passport')(passport);
 
+// Bootstrap db connection
+var db = mongoose.connect(config.db, config.dbOptions);
+var sessionStore = new mongoStore({
+    db: db.connection.db,
+    collection: 'sessions'
+});
+
 // Configure express
-rekuire.config('express')(app, passport);
+rekuire.config('express')(app, passport, sessionStore);
 
 // Configure socket.io
-var io = rekuire.config('socket').createSocket(app, server);
+var io = rekuire.config('socket').createSocket(app, server, sessionStore);
 
 // Configure socket listeners
 rekuire.route('socket')(io);
@@ -44,10 +52,6 @@ rekuire.route('api')(app, passport);
 
 // Configure other routes (possibly with views)
 rekuire.route('routes')(app);
-
-
-// Bootstrap db connection
-mongoose.connect(config.db, config.dbOptions);
 
 // Start application
 server.listen(config.port);

@@ -1,16 +1,10 @@
 'use strict';
 
-require('../testHelper');
-
+var helper = require('../testHelper');
 var request = require('superagent');
-var url = 'http://127.0.0.1:5001';
+var url = helper.url;
 var Task = rekuire.model('task');
-
 var io = require('socket.io-client');
-var options = {
-    transports: ['websocket'],
-    'force new connection': true
-};
 
 // Globals
 var task;
@@ -30,7 +24,8 @@ describe('Task Socket', function () {
         task.save(function () {
             done();
         });
-        client = io.connect(url, options);
+
+        client = io.connect(url, helper.ioOptions);
     });
 
     it('should get all tasks', function (done) {

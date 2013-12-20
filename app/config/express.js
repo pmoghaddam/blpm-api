@@ -3,8 +3,9 @@
 var config = require('./config');
 var path = require('path');
 var express = require('express');
+var flash = require('connect-flash');
 
-module.exports = function (app, passport) {
+module.exports = function (app, passport, sessionStore) {
     app.set('views', config.viewPath);
     app.set('view engine', 'ejs');
     app.use(express.favicon());
@@ -12,10 +13,18 @@ module.exports = function (app, passport) {
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(express.methodOverride());
-    app.use(express.cookieParser('15f84b6a80174b6769025b'));
+    app.use(express.cookieParser());
+
+    //express/mongo session storage
+    app.use(express.session({
+        key: 'express.sid',
+        secret: '6d7b84cf448d',
+        store: sessionStore
+    }));
 
     // Passport security
     app.use(passport.initialize());
+    app.use(passport.session());
 
     app.use(app.router);
     app.use(express.static(path.join(config.rootPath, 'public')));

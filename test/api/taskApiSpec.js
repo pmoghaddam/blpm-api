@@ -1,8 +1,8 @@
 'use strict';
 
-require('../testHelper');
+var helper = require('../testHelper');
 var request = require('superagent');
-var url = 'http://127.0.0.1:5001';
+var url = helper.url;
 var versionedUrl = url + '/v0';
 var Task = rekuire.model('task');
 
