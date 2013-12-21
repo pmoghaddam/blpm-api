@@ -73,6 +73,7 @@ should be made to keep these two layers coded modularly for a future inevitable 
 
 ## Tasks - Lower Priority
 * Confirm security of using CORS for API
+    * Allowing any origin a good idea?
 * Full OAuth2 implementation with tokens being expired and renewed
 * Add other authorization strategies
 * Improve token authentication to expire and not last forever
