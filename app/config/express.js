@@ -3,6 +3,7 @@
 var config = require('./config');
 var path = require('path');
 var express = require('express');
+var cors = rekuire.lib('cors');
 
 module.exports = function (app, passport, sessionStore) {
     app.set('views', config.viewPath);
@@ -24,6 +25,9 @@ module.exports = function (app, passport, sessionStore) {
     // Passport security
     app.use(passport.initialize());
     app.use(passport.session());
+
+    // Cross-domain access
+    app.use(cors);
 
     app.use(app.router);
     app.use(express.static(path.join(config.rootPath, 'public')));

@@ -58,6 +58,7 @@ should be made to keep these two layers coded modularly for a future inevitable 
     * [X] https://github.com/LearnBoost/socket.io/wiki/Authorizing
     * [X] Refer to passportjs-socket.io
 * Resolve "TODOs"
+    * Isolate keys into configs
 * Update README to capture architecture (and ideas so they are not lost)
 * Begin creating simple UI
 * Add more tests
@@ -71,6 +72,7 @@ should be made to keep these two layers coded modularly for a future inevitable 
 
 
 ## Tasks - Lower Priority
+* Confirm security of using CORS for API
 * Full OAuth2 implementation with tokens being expired and renewed
 * Add other authorization strategies
 * Improve token authentication to expire and not last forever
