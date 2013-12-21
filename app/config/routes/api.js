@@ -15,6 +15,7 @@ module.exports = function (app, passport) {
 
     // Authentication for session-based connections (e.g. Socket.IO)
     app.post(version + '/session', passport.authenticate('local'), auth.session);
+    app.post(version + '/registration', auth.registration);
 
     // Authentication to retrieve token
     app.post(version + '/token', passport.authenticate('local', { session: false }), auth.token);
