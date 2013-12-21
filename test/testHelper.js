@@ -61,6 +61,7 @@ agent.post('http://localhost:5001/v0/session')
 /**
  * Expose
  */
+exports.user = user;
 exports.url = 'http://localhost:' + 5001;
 exports.authorizedAgent = agent;
 exports.ioOptions = {

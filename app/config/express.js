@@ -3,7 +3,6 @@
 var config = require('./config');
 var path = require('path');
 var express = require('express');
-var flash = require('connect-flash');
 
 module.exports = function (app, passport, sessionStore) {
     app.set('views', config.viewPath);

@@ -71,6 +71,7 @@ should be made to keep these two layers coded modularly for a future inevitable 
 
 
 ## Tasks - Lower Priority
+* Full OAuth2 implementation with tokens being expired and renewed
 * Add other authorization strategies
 * Improve token authentication to expire and not last forever
 * Add basic logging, and setup a plan on how to use them
