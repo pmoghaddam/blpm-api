@@ -16,8 +16,8 @@ exports.createSocket = function (app, server, sessionStore) {
     // Set authorization for socket.io
     io.set('authorization', passportSocketIo.authorize({
         cookieParser: express.cookieParser,
-        key: 'express.sid', // TODO: Isolate key; duplicate of express.js
-        secret: '6d7b84cf448d',    // TODO: Isolate key; duplicate of express.js
+        key: config.sessionKey,
+        secret: config.sessionSecret,
         store: sessionStore
     }));
 

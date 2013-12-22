@@ -17,8 +17,8 @@ module.exports = function (app, passport, sessionStore) {
 
     //express/mongo session storage
     app.use(express.session({
-        key: 'express.sid',
-        secret: '6d7b84cf448d',
+        key: config.sessionKey,
+        secret: config.sessionSecret,
         store: sessionStore
     }));
 

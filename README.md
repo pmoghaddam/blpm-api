@@ -57,15 +57,17 @@ should be made to keep these two layers coded modularly for a future inevitable 
     need to bring back sessions and local strategy to achieve this.
     * [X] https://github.com/LearnBoost/socket.io/wiki/Authorizing
     * [X] Refer to passportjs-socket.io
-* Resolve "TODOs"
-    * Isolate keys into configs
-* Update README to capture architecture (and ideas so they are not lost)
-* Begin creating simple UI
+* [X] Begin creating simple UI
+* [X] Resolve "TODOs"
+    * [X] Isolate keys into configs
+* Associate tasks to users
+* Update fields of Task to match those of Google Tasks
 * Add more tests
     * Clean database completely (includes removing all session objects)
     * For services; confirm service errors being thrown are correct
     * Add socket API tests
     * Add authentication tests
+* Update README to capture architecture (and ideas so they are not lost)
 * Provide a basic connection between Chrome extension and this API
 * Incorporate effective MEAN skeleton structure into application
 * Figure out how to scale websocket connections
