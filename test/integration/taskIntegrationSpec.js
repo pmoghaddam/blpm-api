@@ -7,8 +7,13 @@ var Task = rekuire.model('task');
 var task;
 
 describe('Task (integration)', function () {
-    before(function() {
-        Task.remove().exec();
+    this.timeout(500);
+
+    /**
+     * Setup & tear down logic
+     */
+    before(function (done) {
+        Task.remove().exec(done);
     });
 
     beforeEach(function () {
@@ -18,6 +23,13 @@ describe('Task (integration)', function () {
         });
     });
 
+    afterEach(function () {
+        task.remove();
+    });
+
+    /**
+     * Tests
+     */
     it('should save', function (done) {
         task.save(function (err) {
             assert.isNull(err);
@@ -25,15 +37,12 @@ describe('Task (integration)', function () {
         });
     });
 
-    it('should validate', function(done) {
+    it('should validate', function (done) {
         task.title = null;
-        task.save(function(err) {
+        task.save(function (err) {
             assert.ok(err);
             done();
         });
     });
 
-    afterEach(function() {
-        task.remove();
-    });
 });

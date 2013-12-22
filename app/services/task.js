@@ -2,29 +2,29 @@
 
 var Task = rekuire.model('task');
 var Q = require('q');
-var _ = require('underscore');
 var socket = rekuire.lib('socket');
 
-exports.create = function (data) {
+exports.create = function (data, user) {
     var deferred = Q.defer();
 
-    var task = new Task(data);
-    task.save(function (err) {
-        if (err) {
-            deferred.reject(new Error(err));
-        } else {
+    data.user = user;
+
+    Task.create(data)
+        .then(function (task) {
             socket.emitToAll('tasks:create', task.toObject());
             deferred.resolve(task);
-        }
-    });
+        }, function (err) {
+            deferred.reject(new Error(err));
+        });
+
 
     return deferred.promise;
 };
 
-exports.list = function () {
+exports.list = function (user) {
     var deferred = Q.defer();
 
-    Task.all(function (err, tasks) {
+    Task.find({user: user}, function (err, tasks) {
         if (err) {
             deferred.reject(new Error(err));
         } else {
@@ -35,12 +35,14 @@ exports.list = function () {
     return deferred.promise;
 };
 
-exports.show = function (id) {
+exports.show = function (id, user) {
     var deferred = Q.defer();
 
-    Task.findById(id, function (err, task) {
+    Task.findOne({_id: id, user: user}, function (err, task) {
         if (err) {
             deferred.reject(new Error(err));
+        } else if (task === null) {
+            deferred.reject(new Error('Unauthorized task access'));
         } else {
             deferred.resolve(task);
         }
@@ -49,34 +51,40 @@ exports.show = function (id) {
     return deferred.promise;
 };
 
-exports.update = function (id, data) {
+exports.update = function (id, data, user) {
     var deferred = Q.defer();
 
-    Task.findById(id, function (err, task) {
-        task = _.extend(task, data);
-        task.save(function (err) {
-            if (err) {
-                deferred.reject(new Error(err));
+    Task.findOneAndUpdate({_id: id, user: user}, data)
+        .exec()
+        .then(function (task) {
+            if (task === null) {
+                deferred.reject(new Error('Unable to update task'));
             } else {
+                socket.emitToAll('tasks:update', task.toObject());
                 deferred.resolve(task);
             }
+        }, function (err) {
+            deferred.reject(new Error(err));
         });
-    });
 
     return deferred.promise;
 };
 
-exports.delete = function (id) {
+exports.delete = function (id, user) {
     var deferred = Q.defer();
 
-    Task.remove({ _id: id }, function (err) {
-        if (err) {
+    Task.findOneAndRemove({ _id: id, user: user })
+        .exec()
+        .then(function (task) {
+            if (task === null) {
+                deferred.reject(new Error('Unable to delete task'));
+            } else {
+                socket.emitToAll('tasks:delete', {_id: id});
+                deferred.resolve(task);
+            }
+        }, function (err) {
             deferred.reject(new Error(err));
-        } else {
-            socket.emitToAll('tasks:delete', {_id: id});
-            deferred.resolve();
-        }
-    });
+        });
 
     return deferred.promise;
 };

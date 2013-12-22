@@ -10,10 +10,10 @@ var task;
 var socket;
 
 describe('Task Socket', function () {
+    this.timeout(500);
+
     before(function (done) {
-        Task.remove().exec(function () {
-            done();
-        });
+        Task.remove().exec(done);
     });
 
     beforeEach(function (done) {
@@ -28,31 +28,67 @@ describe('Task Socket', function () {
         socket = io.connect(url, helper.ioOptions);
     });
 
+    afterEach(function (done) {
+        Task.remove().exec(done);
+        socket.disconnect();
+    });
+
+    /**
+     * Tests
+     */
     it('should get all tasks', function (done) {
-        socket.on('tasks:list', function (tasks) {
+        var event = 'tasks:list';
+        socket.on(event, function (tasks) {
             assert(tasks.length === 1);
             assert(tasks[0].title === 'Sample Task');
             done();
         });
-        socket.emit('tasks:list');
+        socket.emit(event);
     });
 
-    it('should get create updates', function (done) {
-        socket.on('tasks:create', function (task) {
-            assert(task.title === 'Socket Title');
+    it('should create a task', function (done) {
+        var event = 'tasks:create';
+        var data = {title: 'Socket Title'};
+
+        socket.on(event, function (task) {
+            assert(task.title === data.title);
             done();
         });
 
-        socket.on('connect', function () {
-            var userId = helper.user.id.toString();
-            socket.emit('tasks:create', {title: 'Socket Title', user: userId});
-        });
+        socket.emit(event, data);
     });
 
-    afterEach(function (done) {
-        Task.remove().exec(function () {
+    it('should show a task', function (done) {
+        var event = 'tasks:show';
+        socket.on(event, function (res) {
+            assert(res.title === task.title);
             done();
         });
-        socket.disconnect();
+
+        socket.emit(event, {id: task.id});
+    });
+
+    it('should update a task', function (done) {
+        var event = 'tasks:update';
+        var data = {id: task.id, title: 'New Title'};
+
+        socket.on(event, function (res) {
+            assert(res.title === data.title);
+            done();
+        });
+
+        socket.emit(event, data);
+    });
+
+    it('should delete a task', function (done) {
+        var event = 'tasks:delete';
+        var data = {id: task.id};
+
+        socket.on(event, function (res) {
+            assert(res._id === data.id);
+            done();
+        });
+
+        socket.emit(event, data);
     });
 });

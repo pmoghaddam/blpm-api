@@ -1,7 +1,17 @@
 'use strict';
 
-describe('Basic test', function () {
+var helper = require('../testHelper');
+
+describe('Basic (skeleton) test', function () {
+    /**
+     * Setup & tear down logic
+     */
+    this.timeout(500);
+
+    /**
+     * Tests
+     */
     it('should pass', function () {
-        return expect(true).to.equal(true);
+        assert.ok(helper);
     });
 });

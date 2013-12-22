@@ -24,5 +24,7 @@ module.exports = function (io) {
         request(socket, 'tasks:list', task.list);
         request(socket, 'tasks:create', task.create);
         request(socket, 'tasks:delete', task.delete);
+        request(socket, 'tasks:show', task.show);
+        request(socket, 'tasks:update', task.update);
     });
 };

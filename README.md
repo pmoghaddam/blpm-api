@@ -62,7 +62,10 @@ should be made to keep these two layers coded modularly for a future inevitable 
     * [X] Isolate keys into configs
 * Associate tasks to users
 * Update fields of Task to match those of Google Tasks
+* Have socket event emitted to appropriate users, not all users
+    * e.g. create a task, should not be sent to all users
 * Add more tests
+    * Have grunt test:watch work on subsequent tests
     * Clean database completely (includes removing all session objects)
     * For services; confirm service errors being thrown are correct
     * Add socket API tests

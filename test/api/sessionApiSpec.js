@@ -7,6 +7,7 @@ var url = helper.url;
 var versionedUrl = url + '/v0';
 
 describe('Session API', function () {
+    this.timeout(500);
 
     describe('authentication', function () {
         it('should authenticate user', function (done) {
