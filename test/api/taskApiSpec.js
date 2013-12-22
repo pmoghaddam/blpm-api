@@ -18,7 +18,8 @@ describe('Task API', function () {
 
     beforeEach(function (done) {
         task = new Task({
-            title: 'Sample Task'
+            title: 'Sample Task',
+            user: helper.user
         });
 
         task.save(function () {
@@ -38,8 +39,9 @@ describe('Task API', function () {
     });
 
     it('should create task', function (done) {
+        var userId = helper.user.id.toString();
         request.post(versionedUrl + '/tasks')
-            .sendWithToken({title: 'Test Title'})
+            .sendWithToken({title: 'Test Title', user: userId})
             .end(function (res) {
                 var task = res.body;
                 assert(task.title === 'Test Title');

@@ -1,14 +1,13 @@
 'use strict';
 
 var helper = require('../testHelper');
-var request = require('superagent');
 var url = helper.url;
 var Task = rekuire.model('task');
 var io = require('socket.io-client');
 
 // Globals
 var task;
-var client;
+var socket;
 
 describe('Task Socket', function () {
     before(function (done) {
@@ -19,34 +18,34 @@ describe('Task Socket', function () {
 
     beforeEach(function (done) {
         task = new Task({
-            title: 'Sample Task'
+            title: 'Sample Task',
+            user: helper.user
         });
         task.save(function () {
             done();
         });
 
-        client = io.connect(url, helper.ioOptions);
+        socket = io.connect(url, helper.ioOptions);
     });
 
     it('should get all tasks', function (done) {
-        client.on('tasks:list', function (tasks) {
+        socket.on('tasks:list', function (tasks) {
             assert(tasks.length === 1);
             assert(tasks[0].title === 'Sample Task');
             done();
         });
-        client.emit('tasks:list');
+        socket.emit('tasks:list');
     });
 
     it('should get create updates', function (done) {
-        client.on('tasks:create', function (task) {
+        socket.on('tasks:create', function (task) {
             assert(task.title === 'Socket Title');
             done();
         });
 
-        client.on('connect', function () {
-            request.post(url + '/v0/tasks')
-                .sendWithToken({title: 'Socket Title'})
-                .end();
+        socket.on('connect', function () {
+            var userId = helper.user.id.toString();
+            socket.emit('tasks:create', {title: 'Socket Title', user: userId});
         });
     });
 
@@ -54,6 +53,6 @@ describe('Task Socket', function () {
         Task.remove().exec(function () {
             done();
         });
-        client.disconnect();
+        socket.disconnect();
     });
 });

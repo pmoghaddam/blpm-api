@@ -1,19 +1,20 @@
 'use strict';
 
-require('../testHelper');
+var helper = require('../testHelper');
 var Task = rekuire.model('task');
 
 // Test globals
 var task;
 
-describe('Task model', function () {
+describe('Task (integration)', function () {
     before(function() {
         Task.remove().exec();
     });
 
     beforeEach(function () {
         task = new Task({
-            title: 'Sample Task'
+            title: 'Sample Task',
+            user: helper.user
         });
     });
 
