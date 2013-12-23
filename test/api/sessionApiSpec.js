@@ -49,6 +49,24 @@ describe('Session API', function () {
                     done();
                 });
         });
+
+        it('should logout authenticated user', function (done) {
+            var agent = request.agent();
+            agent
+                .post(versionedUrl + '/session')
+                .send({username: 'user', password: 'password'})
+                .end(function (err, res) {
+                    assert(res.status === 200);
+
+                    // Now logout
+                    agent
+                        .del(versionedUrl + '/session')
+                        .end(function (err, res) {
+                            assert(res.status === 200);
+                            done();
+                        });
+                });
+        });
     });
 
     describe('registration', function () {

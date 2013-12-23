@@ -14,6 +14,11 @@ exports.session = function (req, res) {
     res.jsonp(200);
 };
 
+exports.logout = function (req, res) {
+    req.logout();
+    res.jsonp(200);
+};
+
 exports.registration = function(req, res) {
     userService.create(req.body).then(function (user) {
         res.jsonp(user);

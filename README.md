@@ -61,8 +61,8 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * [X] Resolve "TODOs"
     * [X] Isolate keys into configs
 * [X] Associate tasks to users
-* Have socket event emitted to appropriate users, not all users
-    * e.g. create a task, should not be sent to all users
+* [X] Have socket event emitted to appropriate users, not all users
+    * [X] e.g. create a task, should not be sent to all users
 * Update fields of Task to match those of Google Tasks
 * Add more tests
     * Have grunt test:watch work on subsequent tests
@@ -77,6 +77,7 @@ should be made to keep these two layers coded modularly for a future inevitable 
 
 
 ## Tasks - Lower Priority
+* Change all references of "delete" to "del" (a JavaScript warning)
 * Confirm security of using CORS for API
     * Allowing any origin a good idea?
 * Full OAuth2 implementation with tokens being expired and renewed
