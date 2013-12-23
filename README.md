@@ -60,10 +60,10 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * [X] Begin creating simple UI
 * [X] Resolve "TODOs"
     * [X] Isolate keys into configs
-* Associate tasks to users
-* Update fields of Task to match those of Google Tasks
+* [X] Associate tasks to users
 * Have socket event emitted to appropriate users, not all users
     * e.g. create a task, should not be sent to all users
+* Update fields of Task to match those of Google Tasks
 * Add more tests
     * Have grunt test:watch work on subsequent tests
     * Clean database completely (includes removing all session objects)

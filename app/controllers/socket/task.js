@@ -41,4 +41,4 @@ exports.delete = function (data) {
 
 exports.update = function (data) {
     taskService.update(data.id, data, user(this));
-}
+};

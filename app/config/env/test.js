@@ -1,14 +1,23 @@
 'use strict';
 
+var port = 5001;
+
 module.exports = {
     db: process.env.MONGOLAB_URI || 'mongodb://localhost/blpm-test',
     dbOptions: { server: { socketOptions: { connectTimeoutMS: 5000 }}},
-    port: 5001,
+    url: 'http://localhost:' + port,
+    port: port,
     app: {
         name: 'BLPM - Test'
     },
     io: {
         'log level': 1
+    },
+    // Used for testing connections to server
+    ioClient: {
+        transports: ['websocket'],
+        'force new connection': true,
+        query: null // Set dynamically
     },
     facebook: {
         clientID: 'APP_ID',

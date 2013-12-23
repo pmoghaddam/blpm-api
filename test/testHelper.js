@@ -39,32 +39,51 @@ request.Request.prototype.sendWithToken = function (data) {
     return this.send(merged);
 };
 
-// Read session ID from agent
-var cookie = require('express/node_modules/cookie'),
-    parseSignedCookie = require('express/node_modules/connect').utils.parseSignedCookie;
+var config = rekuire.config('config');
 
-var agent = request.agent();
-agent.post('http://localhost:5001/v0/session')
-    .send({username: 'user', password: 'password'})
-    .end(function (err, res) {
+// Read session ID from agent (required by Socket.IO)
+var extractSessionId = function (res) {
+    var cookie = require('express/node_modules/cookie');
+    var parseSignedCookie = require('express/node_modules/connect').utils.parseSignedCookie;
 
-        var cookies = cookie.parse(res.headers['set-cookie'][0]);
-        var signed = cookies['express.sid']; // TODO: Utilize config
+    var cookies = cookie.parse(res.headers['set-cookie'][0]);
+    var signed = cookies[config.sessionKey];
 
-        var sessionId = parseSignedCookie(signed, '6d7b84cf448d'); // TODO: Utilize config
+    var sessionId = parseSignedCookie(signed, config.sessionSecret);
+    return sessionId;
+};
 
-        // Update exports
-        exports.sessionId = sessionId;
-        exports.ioOptions.query = 'session_id=' + sessionId;
+var login = function (credentials, cb) {
+    credentials = credentials || {username: 'user', password: 'password'};
+    var agent = request.agent();
+    agent.post(config.url + '/v0/session')
+        .send(credentials)
+        .end(function (err, res) {
+            cb({
+                agent: agent,
+                sessionId: extractSessionId(res)
+            });
+        });
+};
+
+var io = require('socket.io-client');
+var loginAndConnect = function (credentials, cb) {
+    credentials = credentials || {username: 'user', password: 'password'};
+    login(credentials, function (data) {
+        var options = _.extend({}, config.ioClient, {query: 'session_id=' + data.sessionId});
+        var socket = io.connect(config.url, options);
+
+        data = _.extend(data, {socket: socket});
+        socket.on('connect', function () {
+            cb(data);
+        });
     });
+};
 
 /**
  * Expose
  */
 exports.user = user;
-exports.url = 'http://localhost:' + 5001;
-exports.authorizedAgent = agent;
-exports.ioOptions = {
-    transports: ['websocket'],
-    'force new connection': true
-};
+exports.url = config.url;
+exports.login = login;
+exports.loginAndConnect = loginAndConnect;

@@ -2,6 +2,8 @@
 
 var helper = require('../testHelper');
 var request = require('superagent');
+var _ = require('underscore');
+var config = rekuire.config('config');
 var url = helper.url;
 var mongoose = require('mongoose');
 var dispatcher = rekuire.lib('dispatcher');
@@ -38,12 +40,15 @@ describe('Basic integration test', function () {
     describe('authenticated', function () {
 
         it('should connect to Socket.IO (with authentication)', function (done) {
-            var client = io.connect(url, helper.ioOptions);
+            helper.login(null, function (data) {
+                var options = _.extend({}, config.ioClient, {query: 'session_id=' + data.sessionId});
+                var socket = io.connect(config.url, options);
 
-            client.on('connected', function (data) {
-                assert.ok(data.connected);
-                client.disconnect();
-                done();
+                socket.on('connected', function (data) {
+                    assert.ok(data.connected);
+                    socket.disconnect();
+                    done();
+                });
             });
         });
     });

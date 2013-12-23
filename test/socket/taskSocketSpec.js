@@ -1,9 +1,7 @@
 'use strict';
 
 var helper = require('../testHelper');
-var url = helper.url;
 var Task = rekuire.model('task');
-var io = require('socket.io-client');
 
 // Globals
 var task;
@@ -21,11 +19,12 @@ describe('Task Socket', function () {
             title: 'Sample Task',
             user: helper.user
         });
-        task.save(function () {
+        task.save();
+
+        helper.loginAndConnect(null, function (data) {
+            socket = data.socket;
             done();
         });
-
-        socket = io.connect(url, helper.ioOptions);
     });
 
     afterEach(function (done) {

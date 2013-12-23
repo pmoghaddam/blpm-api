@@ -2,7 +2,7 @@
 
 var Task = rekuire.model('task');
 var Q = require('q');
-var socket = rekuire.lib('socket');
+var socket = rekuire.service('socket');
 
 exports.create = function (data, user) {
     var deferred = Q.defer();
@@ -11,7 +11,7 @@ exports.create = function (data, user) {
 
     Task.create(data)
         .then(function (task) {
-            socket.emitToAll('tasks:create', task.toObject());
+            socket.emitToUser('tasks:create', task.toObject(), user);
             deferred.resolve(task);
         }, function (err) {
             deferred.reject(new Error(err));
@@ -60,7 +60,7 @@ exports.update = function (id, data, user) {
             if (task === null) {
                 deferred.reject(new Error('Unable to update task'));
             } else {
-                socket.emitToAll('tasks:update', task.toObject());
+                socket.emitToUser('tasks:update', task.toObject(), user);
                 deferred.resolve(task);
             }
         }, function (err) {
@@ -79,7 +79,7 @@ exports.delete = function (id, user) {
             if (task === null) {
                 deferred.reject(new Error('Unable to delete task'));
             } else {
-                socket.emitToAll('tasks:delete', {_id: id});
+                socket.emitToUser('tasks:delete', {_id: id}, user);
                 deferred.resolve(task);
             }
         }, function (err) {
