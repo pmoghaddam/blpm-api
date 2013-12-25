@@ -6,7 +6,7 @@ global.expect = require('chai').expect;
 global.rekuire = require('../lib/rekuire');
 
 // Sets up server and MongoDB connection
-require('../server');
+var app = require('../server');
 
 /**
  * Seed database
@@ -25,6 +25,12 @@ var user = new User({
     password: 'password'
 });
 user.save();
+
+after(function(done) {
+    var server = app.get('server');
+    server.close();
+    done();
+});
 
 /**
  * Test helpers

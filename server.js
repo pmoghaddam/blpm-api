@@ -3,4 +3,4 @@
  * Module dependencies.
  */
 
-require('./app/app');
+module.exports = require('./app/app');

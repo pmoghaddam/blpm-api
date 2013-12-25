@@ -27,6 +27,7 @@ var app = express();
 
 // Set server
 var server = http.createServer(app);
+app.set('server', server);
 
 // Configure passport (security)
 rekuire.config('passport')(passport);
