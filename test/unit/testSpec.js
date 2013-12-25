@@ -3,10 +3,6 @@
 var helper = require('../testHelper');
 
 describe('Basic (skeleton) test', function () {
-    /**
-     * Setup & tear down logic
-     */
-    this.timeout(500);
 
     /**
      * Tests

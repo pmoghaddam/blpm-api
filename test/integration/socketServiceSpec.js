@@ -11,8 +11,6 @@ describe('Socket service (integration)', function () {
     /**
      * Setup & tear down logic
      */
-    this.timeout(500);
-
     beforeEach(function (done) {
         user = helper.user;
         helper.loginAndConnect(null, function (data) {

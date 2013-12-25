@@ -26,7 +26,14 @@ var user = new User({
 });
 user.save();
 
-after(function(done) {
+/**
+ * Global before and after
+ */
+before(function () {
+    this.timeout(500);
+});
+
+after(function (done) {
     var server = app.get('server');
     server.close();
     done();
