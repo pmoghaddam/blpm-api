@@ -38,8 +38,8 @@ describe('Task Socket', function () {
     it('should get all tasks', function (done) {
         var event = 'tasks:list';
         socket.on(event, function (tasks) {
-            assert(tasks.length === 1);
-            assert(tasks[0].title === 'Sample Task');
+            assert.equal(tasks.length, 1);
+            assert.equal(tasks[0].title, 'Sample Task');
             done();
         });
         socket.emit(event);
@@ -50,7 +50,7 @@ describe('Task Socket', function () {
         var data = {title: 'Socket Title'};
 
         socket.on(event, function (task) {
-            assert(task.title === data.title);
+            assert.equal(task.title, data.title);
             done();
         });
 
@@ -60,7 +60,7 @@ describe('Task Socket', function () {
     it('should show a task', function (done) {
         var event = 'tasks:show';
         socket.on(event, function (res) {
-            assert(res.title === task.title);
+            assert.equal(res.title, task.title);
             done();
         });
 
@@ -72,7 +72,7 @@ describe('Task Socket', function () {
         var data = {id: task.id, title: 'New Title'};
 
         socket.on(event, function (res) {
-            assert(res.title === data.title);
+            assert.equal(res.title, data.title);
             done();
         });
 
@@ -84,7 +84,7 @@ describe('Task Socket', function () {
         var data = {id: task.id};
 
         socket.on(event, function (res) {
-            assert(res._id === data.id);
+            assert.equal(res._id, data.id);
             done();
         });
 

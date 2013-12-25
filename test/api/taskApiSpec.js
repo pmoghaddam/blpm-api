@@ -34,8 +34,8 @@ describe('Task API', function () {
             .sendWithToken()
             .end(function (res) {
                 var tasks = res.body;
-                assert(tasks.length === 1);
-                assert(tasks[0].title === 'Sample Task');
+                assert.equal(tasks.length, 1);
+                assert.equal(tasks[0].title, 'Sample Task');
                 done();
             });
     });
@@ -46,7 +46,7 @@ describe('Task API', function () {
             .sendWithToken({title: 'Test Title', user: userId})
             .end(function (res) {
                 var task = res.body;
-                assert(task.title === 'Test Title');
+                assert.equal(task.title, 'Test Title');
                 done();
             });
     });
@@ -56,7 +56,7 @@ describe('Task API', function () {
             .sendWithToken()
             .end(function (res) {
                 var task = res.body;
-                assert(task.title === 'Sample Task');
+                assert.equal(task.title, 'Sample Task');
                 done();
             });
     });
@@ -66,7 +66,7 @@ describe('Task API', function () {
             .sendWithToken({title: 'Updated Title'})
             .end(function (res) {
                 var task = res.body;
-                assert(task.title === 'Updated Title');
+                assert.equal(task.title, 'Updated Title');
                 done();
             });
     });
@@ -76,9 +76,9 @@ describe('Task API', function () {
         request.del(versionedUrl + '/tasks/' + id)
             .sendWithToken()
             .end(function (res) {
-                assert(res.statusCode === 200);
+                assert.equal(res.statusCode, 200);
                 Task.find({ _id: id}).count().exec(function (err, count) {
-                    assert(count === 0);
+                    assert.equal(count, 0);
                     done();
                 });
             });

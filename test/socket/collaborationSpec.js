@@ -56,7 +56,7 @@ describe('Socket collaboration', function () {
         var data = {title: 'Title'};
 
         socket.on(event, function (task) {
-            assert(task.title === data.title);
+            assert.equal(task.title, data.title);
             done();
         });
 
@@ -78,11 +78,11 @@ describe('Socket collaboration', function () {
                 });
 
             socket.on(event, function (task) {
-                assert(task.title === task1.title);
+                assert.equal(task.title, task1.title);
                 socketDefer.resolve(task);
             });
             altSocket.on(event, function (task) {
-                assert(task.title === task2.title);
+                assert.equal(task.title, task2.title);
                 altSocketDefer.resolve(task);
             });
 

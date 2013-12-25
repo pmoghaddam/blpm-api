@@ -15,7 +15,7 @@ describe('Session API', function () {
                 .post(versionedUrl + '/session')
                 .send({username: 'user', password: 'password'})
                 .end(function (err, res) {
-                    assert(res.status === 200, 'Unable to login authenticated user');
+                    assert.equal(res.status, 200);
                     done();
                 });
         });
@@ -25,7 +25,7 @@ describe('Session API', function () {
                 .post(versionedUrl + '/session')
                 .send({username: 'wrong', password: 'wrong'})
                 .end(function (err, res) {
-                    assert(res.status === 401, 'Unauthorized access expected');
+                    assert.equal(res.status, 401);
                     done();
                 });
         });
@@ -35,7 +35,7 @@ describe('Session API', function () {
                 .post(versionedUrl + '/token')
                 .send({username: 'user', password: 'password'})
                 .end(function (err, res) {
-                    assert(res.body.access_token === helper.user.token, 'Invalid token received');
+                    assert.equal(res.body.access_token, helper.user.token);
                     done();
                 });
         });
@@ -45,7 +45,7 @@ describe('Session API', function () {
                 .post(versionedUrl + '/token')
                 .send({username: 'wrong', password: 'wrong'})
                 .end(function (err, res) {
-                    assert(res.status === 401, 'Unauthorized access expected');
+                    assert.equal(res.status, 401);
                     done();
                 });
         });
@@ -56,13 +56,13 @@ describe('Session API', function () {
                 .post(versionedUrl + '/session')
                 .send({username: 'user', password: 'password'})
                 .end(function (err, res) {
-                    assert(res.status === 200);
+                    assert.equal(res.status, 200);
 
                     // Now logout
                     agent
                         .del(versionedUrl + '/session')
                         .end(function (err, res) {
-                            assert(res.status === 200);
+                            assert.equal(res.status, 200);
                             done();
                         });
                 });
@@ -77,7 +77,7 @@ describe('Session API', function () {
                     username: 'registrationtest',
                     password: 'payam'})
                 .end(function (err, res) {
-                    assert(res.status === 200, 'Unable to register user');
+                    assert.equal(res.status, 200);
 
                     // Clean up
                     User.remove({email: 'registrationtest@test.com'}).exec();

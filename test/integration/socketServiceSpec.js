@@ -28,12 +28,12 @@ describe('Socket service (integration)', function () {
     /**
      * Tests
      */
-    it('should emit an event to user for all of user"s sockets', function (done) {
+    it("should emit an event to user for all of user's sockets", function (done) {
         var event = 'test';
         var data = {title: 'title'};
 
         socket.on(event, function (res) {
-            assert(res.title === data.title);
+            assert.equal(res.title, data.title);
             done();
         });
 

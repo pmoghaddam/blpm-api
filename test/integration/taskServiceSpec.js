@@ -136,7 +136,7 @@ describe('Task service (integration)', function () {
         taskService.create({title: 'Brand New Task'}, user)
             .then(function (task) {
                 assert.ok(task, 'Task could not be created');
-                assert(task.user.toString() === user.id, 'Task not properly associated');
+                assert.equal(task.user.toString(), user.id);
                 done();
             });
     });
