@@ -53,6 +53,7 @@ describe('Task service (integration)', function () {
 
     afterEach(function () {
         task.remove();
+        altTask.remove();
     });
 
     after(function () {
@@ -135,7 +136,9 @@ describe('Task service (integration)', function () {
             .then(function (task) {
                 assert.ok(task, 'Task could not be created');
                 assert.equal(task.user.toString(), user.id);
-                done();
+
+                // Clean up
+                task.remove(done);
             });
     });
 

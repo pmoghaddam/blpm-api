@@ -6,11 +6,15 @@ var Schema = mongoose.Schema;
 /**
  * Schema
  */
-var taskSchema = new Schema({
+var schema = new Schema({
     user: {
         type: Schema.ObjectId,
         ref: 'User',
         required: true
+    },
+    taskList: {
+        type: Schema.ObjectId,
+        ref: 'TaskList'
     },
     createdAt: {
         type: Date,
@@ -58,22 +62,17 @@ var taskSchema = new Schema({
 /**
  * Validations
  */
-taskSchema.path('title').validate(function (title) {
+schema.path('title').validate(function (title) {
     return title && title.length;
 }, 'Title cannot be blank');
 
 /**
  * Statics
  */
-taskSchema.statics = {
+schema.statics = {
     all: function (cb) {
         this.find().sort('-created').exec(cb);
-    },
-    findById: function (id, cb) {
-        this.findOne({
-            _id: id
-        }).exec(cb);
     }
 };
 
-module.exports = mongoose.model('Task', taskSchema);
+module.exports = mongoose.model('Task', schema);
