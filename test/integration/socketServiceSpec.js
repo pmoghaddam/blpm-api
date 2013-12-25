@@ -8,6 +8,8 @@ var socket;
 var user;
 
 describe('Socket service (integration)', function () {
+    this.timeout(500);
+
     /**
      * Setup & tear down logic
      */

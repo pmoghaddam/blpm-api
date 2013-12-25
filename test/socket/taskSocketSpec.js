@@ -8,6 +8,7 @@ var task;
 var socket;
 
 describe('Task Socket', function () {
+    this.timeout(500);
 
     before(function (done) {
         Task.remove().exec(done);

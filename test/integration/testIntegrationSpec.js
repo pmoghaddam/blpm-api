@@ -11,6 +11,7 @@ var io = require('socket.io-client');
 
 
 describe('Basic integration test', function () {
+    this.timeout(500);
 
     it('should contact server', function (done) {
         request(url, function (error, response) {

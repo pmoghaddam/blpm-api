@@ -30,7 +30,7 @@ user.save();
  * Global before and after
  */
 before(function () {
-    this.timeout(500);
+    // Add global before logic here
 });
 
 after(function (done) {

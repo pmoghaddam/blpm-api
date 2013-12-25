@@ -7,6 +7,7 @@ var User = rekuire.model('user');
 var Q = require('q');
 
 describe('Task List (Integration)', function () {
+    this.timeout(500);
 
     // Test variables
     var user = helper.user;

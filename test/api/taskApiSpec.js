@@ -10,6 +10,8 @@ var Task = rekuire.model('task');
 var task;
 
 describe('Task API', function () {
+    this.timeout(500);
+
     before(function (done) {
         Task.remove().exec(function () {
             done();

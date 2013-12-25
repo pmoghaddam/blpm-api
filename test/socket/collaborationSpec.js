@@ -10,6 +10,7 @@ var altSocket;
 
 // TODO: Move into taskSocketSpec, since this is general
 describe('Socket collaboration', function () {
+    this.timeout(500);
 
     beforeEach(function (done) {
         var userDefer = Q.defer();

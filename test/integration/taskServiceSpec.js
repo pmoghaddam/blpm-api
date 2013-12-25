@@ -14,6 +14,8 @@ var user = helper.user;
 var altUser;
 
 describe('Task service (integration)', function () {
+    this.timeout(500);
+
     /**
      * Setup & tear down logic
      */

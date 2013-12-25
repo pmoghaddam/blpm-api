@@ -5,6 +5,7 @@ var Task = rekuire.model('task');
 var TaskList = rekuire.model('taskList');
 
 describe('Task (integration)', function () {
+    this.timeout(500);
 
     // Test globals
     var task;
