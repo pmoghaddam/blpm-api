@@ -43,6 +43,15 @@ describe('Task List service (Integration)', function () {
     });
 
     describe('CRUD', function () {
+        it('should get all task lists of a user', function (done) {
+            taskListService.list(user)
+                .then(function (taskLists) {
+                    assert.equal(taskLists.length, 1);
+                    assert.equal(taskLists[0].title, taskList.title);
+                    done();
+                });
+        });
+
         it('should create a new task list', function (done) {
             var data = {
                 title: 'New'

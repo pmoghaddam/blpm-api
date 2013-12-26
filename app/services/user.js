@@ -18,3 +18,22 @@ exports.create = function (data) {
     return deferred.promise;
 };
 
+exports.show = function (id) {
+    var deferred = Q.defer();
+
+    User.findById(id,
+        function (err, user) {
+            if (err) {
+                deferred.reject(new Error(err));
+            } else if (user === null) {
+                deferred.reject(new Error('Unable to get task list'));
+            } else {
+                deferred.resolve(user);
+            }
+        });
+
+    return deferred.promise;
+};
+
+// Alias
+exports.get = exports.show;

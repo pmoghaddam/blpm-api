@@ -19,6 +19,21 @@ var findById = function (id) {
     return deferred.promise;
 };
 
+exports.list = function (user) {
+    var deferred = Q.defer();
+
+    TaskList.find({'collaborators.user': user}, function (err, taskLists) {
+        if (err) {
+            deferred.reject(new Error(err));
+        } else {
+            deferred.resolve(taskLists);
+        }
+    });
+
+    return deferred.promise;
+};
+
+
 exports.create = function (data, user) {
     var deferred = Q.defer();
 
@@ -28,9 +43,8 @@ exports.create = function (data, user) {
         if (err) {
             deferred.reject(new Error(err));
         } else {
-            socket.emitToUser('taskList:create', doc.toObject(), user);
+            socket.emitToUser('taskList:create', doc.toObject(), user.id);
             deferred.resolve(doc);
-
         }
     });
 
@@ -117,7 +131,7 @@ exports.removeCollaborator = function (id, user) {
             if (err) {
                 deferred.reject(new Error(err));
             } else {
-                socket.emitToUser('collaborator:delete', user.id);
+                socket.emitToUser('collaborator:delete', {_id: id}, user.id);
                 deferred.resolve(doc);
             }
         });

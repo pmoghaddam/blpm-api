@@ -1,6 +1,7 @@
 'use strict';
 
 var task = rekuire.socketController('task');
+var taskList = rekuire.socketController('taskList');
 
 /**
  * Convenient listener for playback events
@@ -26,5 +27,14 @@ module.exports = function (io) {
         request(socket, 'tasks:delete', task.delete);
         request(socket, 'tasks:show', task.show);
         request(socket, 'tasks:update', task.update);
+
+        request(socket, 'taskList:list', taskList.list);
+        request(socket, 'taskList:create', taskList.create);
+        request(socket, 'taskList:delete', taskList.delete);
+        request(socket, 'taskList:show', taskList.show);
+        request(socket, 'taskList:update', taskList.update);
+
+        request(socket, 'collaborator:create', taskList.addCollaborator);
+        request(socket, 'collaborator:delete', taskList.removeCollaborator);
     });
 };
