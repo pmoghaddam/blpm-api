@@ -164,7 +164,7 @@ describe('Task List service (Integration)', function () {
             taskListService.create({title: 'New Task List'}, user)
                 .then(function (taskList) {
                     assert(socket.emitToUser.calledOnce);
-                    assert(socket.emitToUser.calledWith('taskList:create'));
+                    assert(socket.emitToUser.calledWith('taskLists:create'));
                     taskList.remove(done);
                 });
         });
@@ -172,9 +172,9 @@ describe('Task List service (Integration)', function () {
         it('should notify the user of a task list being updated', function (done) {
             var data = {title: 'Updated Name'};
             taskListService.update(taskList.id, data, user)
-                .then(function (taskList) {
+                .then(function () {
                     assert(socket.emitToUser.calledOnce);
-                    assert(socket.emitToUser.calledWith('taskList:update'));
+                    assert(socket.emitToUser.calledWith('taskLists:update'));
                     done();
                 });
         });
@@ -183,7 +183,7 @@ describe('Task List service (Integration)', function () {
             taskListService.delete(taskList.id, user)
                 .then(function () {
                     assert(socket.emitToUser.calledOnce);
-                    assert(socket.emitToUser.calledWith('taskList:delete'));
+                    assert(socket.emitToUser.calledWith('taskLists:delete'));
                     done();
                 });
         });

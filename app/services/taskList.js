@@ -43,7 +43,7 @@ exports.create = function (data, user) {
         if (err) {
             deferred.reject(new Error(err));
         } else {
-            socket.emitToUser('taskList:create', doc.toObject(), user.id);
+            socket.emitToUser('taskLists:create', doc.toObject(), user.id);
             deferred.resolve(doc);
         }
     });
@@ -61,7 +61,7 @@ exports.update = function (id, data, user) {
             } else if (err) {
                 deferred.reject(new Error(err));
             } else {
-                socket.emitToUser('taskList:update', taskList.toObject(), user.id);
+                socket.emitToUser('taskLists:update', taskList.toObject(), user.id);
                 deferred.resolve(taskList);
             }
         });
@@ -96,7 +96,7 @@ exports.delete = function (id, user) {
             } else if (taskList === null) {
                 deferred.reject(new Error('Unable to remove task list'));
             } else {
-                socket.emitToUser('taskList:delete', {_id: id}, user.id);
+                socket.emitToUser('taskLists:delete', {_id: id}, user.id);
                 deferred.resolve(taskList);
             }
         });

@@ -38,7 +38,7 @@ describe('Task List Socket', function () {
      * Tests
      */
     it('should get all task lists', function (done) {
-        var event = 'taskList:list';
+        var event = 'taskLists:list';
         socket.on(event, function (taskLists) {
             assert.equal(taskLists.length, 1);
             assert.equal(taskLists[0].title, taskList.title);
@@ -48,7 +48,7 @@ describe('Task List Socket', function () {
     });
 
     it('should show a task list', function (done) {
-        var event = 'taskList:show';
+        var event = 'taskLists:show';
         socket.on(event, function (res) {
             assert.equal(res.title, taskList.title);
             done();
@@ -57,7 +57,7 @@ describe('Task List Socket', function () {
     });
 
     it('should create a task list', function (done) {
-        var event = 'taskList:create';
+        var event = 'taskLists:create';
         var data = {title: 'Socket Task List Title'};
 
         socket.on(event, function (taskList) {
@@ -69,7 +69,7 @@ describe('Task List Socket', function () {
     });
 
     it('should update a task list', function (done) {
-        var event = 'taskList:update';
+        var event = 'taskLists:update';
         var data = {id: taskList.id, title: 'New Title'};
 
         socket.on(event, function (res) {
@@ -81,7 +81,7 @@ describe('Task List Socket', function () {
     });
 
     it('should delete a task list', function (done) {
-        var event = 'taskList:delete';
+        var event = 'taskLists:delete';
         var data = {id: taskList.id};
 
         socket.on(event, function (res) {
