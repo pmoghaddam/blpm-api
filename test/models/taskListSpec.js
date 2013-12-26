@@ -135,7 +135,12 @@ describe('Task List (Integration)', function () {
         it('should be shareable with another user', function (done) {
             assert.isFalse(taskList.isAuthorized(altUser));
 
-            taskList.addCollaborator(altUser, 'editor', function (err) {
+            // Verify before save
+            taskList.addCollaborator(altUser, 'editor');
+            assert.isTrue(taskList.isAuthorized(altUser));
+
+            // Verify post save
+            taskList.save(function (err) {
                 assert.isNull(err);
                 assert.isTrue(taskList.isAuthorized(altUser));
                 done();
@@ -143,22 +148,30 @@ describe('Task List (Integration)', function () {
         });
 
         it('should be un-shareable with another user', function (done) {
-            taskList.addCollaborator(altUser, 'editor', function () {
-                taskList.removeCollaborator(altUser, function (err) {
+            taskList.addCollaborator(altUser, 'editor').save(function () {
+
+                // Verify before save
+                taskList.removeCollaborator(altUser);
+                assert.isFalse(taskList.isAuthorized(altUser));
+
+                // Verify post save
+                taskList.save(function (err) {
                     assert.isNull(err);
+                    assert.isFalse(taskList.isAuthorized(altUser));
                     done();
                 });
             });
         });
 
         it('should have one associated user be owner', function (done) {
-            taskList.addCollaborator(altUser, 'editor', function () {
-                taskList.removeCollaborator(user, function (err) {
-                    assert.ok(err);
-                    done();
-                });
+            taskList.addCollaborator(altUser, 'editor');
+            taskList.removeCollaborator(user);
+            taskList.save(function (err) {
+                assert.ok(err);
+                done();
             });
         });
+
     });
 
 });

@@ -13,9 +13,7 @@ describe('Task API', function () {
     this.timeout(500);
 
     before(function (done) {
-        Task.remove().exec(function () {
-            done();
-        });
+        Task.remove().exec(done);
     });
 
     beforeEach(function (done) {
@@ -24,9 +22,7 @@ describe('Task API', function () {
             user: helper.user
         });
 
-        task.save(function () {
-            done();
-        });
+        task.save(done);
     });
 
     it('should get all tasks', function (done) {
@@ -85,8 +81,6 @@ describe('Task API', function () {
     });
 
     afterEach(function (done) {
-        Task.remove().exec(function () {
-            done();
-        });
+        Task.remove().exec(done);
     });
 });

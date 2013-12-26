@@ -7,6 +7,9 @@ var User = rekuire.model('user');
 var Q = require('q');
 var taskService = rekuire.service('task');
 
+var socket = rekuire.service('socket');
+var sinon = require('sinon');
+
 // Test globals
 var task;
 var altTask;
@@ -28,7 +31,8 @@ describe('Task service (integration)', function () {
                     name: 'Alt',
                     email: 'altusertesting@email.com',
                     username: 'altuser',
-                    password: 'password'
+                    password: 'password',
+                    token: '78651'
                 });
                 altUser.save(done);
             });
@@ -53,13 +57,13 @@ describe('Task service (integration)', function () {
             });
     });
 
-    afterEach(function () {
+    afterEach(function (done) {
         task.remove();
-        altTask.remove();
+        altTask.remove(done);
     });
 
-    after(function () {
-        altUser.remove();
+    after(function (done) {
+        altUser.remove(done);
     });
 
     /**
@@ -142,6 +146,43 @@ describe('Task service (integration)', function () {
                 // Clean up
                 task.remove(done);
             });
+    });
+
+    describe('notifications for a task', function () {
+        beforeEach(function () {
+            sinon.stub(socket, 'emitToCollaborators');
+        });
+
+        afterEach(function () {
+            socket.emitToCollaborators.restore();
+        });
+
+        it('should notify collaborators for a task created', function (done) {
+            taskService.create({title: 'New Task Title'}, user)
+                .then(function (task) {
+                    assert(socket.emitToCollaborators.calledOnce);
+                    assert(socket.emitToCollaborators.calledWith('tasks:create'));
+                    task.remove(done);
+                });
+        });
+
+        it('should notify collaborators for a task updated', function (done) {
+            taskService.update(task.id, {title: 'Updated Title'}, user)
+                .then(function () {
+                    assert(socket.emitToCollaborators.calledOnce);
+                    assert(socket.emitToCollaborators.calledWith('tasks:update'));
+                    done();
+                });
+        });
+
+        it('should notify collaborators for a task deleted', function (done) {
+            taskService.delete(task.id, user)
+                .then(function () {
+                    assert(socket.emitToCollaborators.calledOnce);
+                    assert(socket.emitToCollaborators.calledWith('tasks:delete'));
+                    done();
+                });
+        });
     });
 
 });

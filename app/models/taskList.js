@@ -58,19 +58,19 @@ schema.methods = {
         return !!authorized;
     },
 
-    addCollaborator: function (user, access, cb) {
+    addCollaborator: function (user, access) {
         this.collaborators.push({
             user: user.id,
             access: access
         });
-        return this.save(cb);
+        return this;
     },
 
-    removeCollaborator: function (user, cb) {
+    removeCollaborator: function (user) {
         this.collaborators = _.reject(this.collaborators, function (item) {
             return item.user.equals(user.id);
         });
-        return this.save(cb);
+        return this;
     },
 
     /**

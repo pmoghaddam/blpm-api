@@ -11,7 +11,7 @@ exports.create = function (data, user) {
 
     Task.create(data)
         .then(function (task) {
-            socket.emitToUser('tasks:create', task.toObject(), user);
+            socket.emitToCollaborators('tasks:create', task.toObject(), task);
             deferred.resolve(task);
         }, function (err) {
             deferred.reject(new Error(err));
@@ -60,7 +60,7 @@ exports.update = function (id, data, user) {
             if (task === null) {
                 deferred.reject(new Error('Unable to update task'));
             } else {
-                socket.emitToUser('tasks:update', task.toObject(), user);
+                socket.emitToCollaborators('tasks:update', task.toObject(), task);
                 deferred.resolve(task);
             }
         }, function (err) {
@@ -79,7 +79,7 @@ exports.delete = function (id, user) {
             if (task === null) {
                 deferred.reject(new Error('Unable to delete task'));
             } else {
-                socket.emitToUser('tasks:delete', {_id: id}, user);
+                socket.emitToCollaborators('tasks:delete', {_id: id}, task);
                 deferred.resolve(task);
             }
         }, function (err) {

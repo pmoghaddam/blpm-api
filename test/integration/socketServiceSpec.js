@@ -37,6 +37,6 @@ describe('Socket service (integration)', function () {
             done();
         });
 
-        socketService.emitToUser(event, data, user);
+        socketService.emitToUser(event, data, user.id);
     });
 });

@@ -35,8 +35,9 @@ before(function () {
 
 after(function (done) {
     var server = app.get('server');
-    server.close();
-    done();
+    server.close(function() {
+        done();
+    });
 });
 
 /**
