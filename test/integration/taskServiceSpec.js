@@ -10,14 +10,18 @@ var taskService = rekuire.service('task');
 var socket = rekuire.service('socket');
 var sinon = require('sinon');
 
-// Test globals
-var task;
-var altTask;
-var user = helper.user;
-var altUser;
+var taskFixture = require('../fixtures/taskFixture');
+var taskListFixture = require('../fixtures/taskListFixture');
+
 
 describe('Task service (integration)', function () {
     this.timeout(500);
+
+    // Test globals
+    var task;
+    var altTask;
+    var user = helper.user;
+    var altUser;
 
     /**
      * Setup & tear down logic
@@ -39,7 +43,7 @@ describe('Task service (integration)', function () {
     });
 
     beforeEach(function (done) {
-        var tasks = [
+        var data = [
             {
                 title: 'Sample Task',
                 user: user
@@ -49,10 +53,11 @@ describe('Task service (integration)', function () {
                 user: altUser
             }
         ];
-        Task.create(tasks)
-            .then(function (firstTask, secondTask) {
-                task = firstTask;
-                altTask = secondTask;
+
+        taskFixture.createTasks(data)
+            .then(function (tasks) {
+                task = tasks[0];
+                altTask = tasks[1];
                 done();
             });
     });
@@ -66,26 +71,88 @@ describe('Task service (integration)', function () {
         altUser.remove(done);
     });
 
-    /**
-     * Tests
-     */
-    it('should list all tasks associated with a user', function (done) {
-        taskService.list(user)
-            .then(function (tasks) {
-                var userTask = _.find(tasks, function (entry) {
-                    return entry.id === task.id;
+    describe('using a Task List', function () {
+        var taskList;
+        var taskListTask;
+
+        beforeEach(function (done) {
+            taskListFixture.createTaskList(user)
+                .then(function (input) {
+                    taskList = input;
+                    return taskFixture.createTask({user: user, taskList: input});
+                }).then(function (input) {
+                    taskListTask = input;
+                    done();
                 });
-                var altUserTask = _.find(tasks, function (entry) {
-                    return entry.id === altTask.id;
+        });
+
+        afterEach(function (done) {
+            taskList.remove();
+            taskListTask.remove(done);
+        });
+
+        it('should list all (uncategorized) tasks associated with a user', function (done) {
+            taskService.list(user)
+                .then(function (tasks) {
+                    var userTask = _.find(tasks, function (entry) {
+                        return entry.id === task.id;
+                    });
+                    var altUserTask = _.find(tasks, function (entry) {
+                        return entry.id === altTask.id;
+                    });
+                    var taskListsTask = _.find(tasks, function (entry) {
+                        return entry.id === taskListTask.id;
+                    });
+                    assert.ok(userTask, "User's task not found");
+                    assert.notOk(altUserTask, 'Incorrect task found');
+                    assert.notOk(taskListsTask, 'Task list task found in uncategorized category');
+                    done();
+                })
+                .fail(function (err) {
+                    done(err);
                 });
-                assert.ok(userTask, "User's task not found");
-                assert.notOk(altUserTask, 'Incorrect task found');
-                done();
-            })
-            .fail(function (err) {
-                done(err);
-            });
+        });
+
+        it('should list all tasks associated with a task list (excludes uncategorized)', function (done) {
+            taskService.list(user, taskList)
+                .then(function (tasks) {
+                    var userTask = _.find(tasks, function (entry) {
+                        return entry.id === task.id;
+                    });
+                    var taskListsTask = _.find(tasks, function (entry) {
+                        return entry.id === taskListTask.id;
+                    });
+                    assert.notOk(userTask);
+                    assert.ok(taskListsTask);
+                    done();
+                })
+                .fail(function (err) {
+                    done(err);
+                });
+        });
+
+        it('should not list tasks from a unauthorized task list', function (done) {
+            var altTaskListTask;
+
+            taskListFixture.createTaskList(altUser)
+                .then(function (input) {
+                    return taskFixture.createTask({user: altUser, taskList: input});
+                }).then(function (input) {
+                    altTaskListTask = input;
+                    return taskService.list(user, taskList);
+                }).then(function (tasks) {
+                    var unauthTask = _.find(tasks, function (entry) {
+                        return entry.id === altTaskListTask.id;
+                    });
+                    assert.notOk(unauthTask);
+                    done();
+                })
+                .fail(function (err) {
+                    done(err);
+                });
+        });
     });
+
     it('should show a task associated with a user', function (done) {
         var asyncTests = [
             taskService.show(task.id, user)

@@ -10,8 +10,9 @@ var user = function (socket) {
  * Two-way message
  */
 exports.list = function (data, done) {
+    var taskList = (data) ? data.taskList : undefined;
     taskService
-        .list(user(this))
+        .list(user(this), taskList)
         .then(function (tasks) {
             var tasksLean = tasks.map(function (task) {
                 return task.toObject();

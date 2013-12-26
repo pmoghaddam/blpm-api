@@ -21,10 +21,17 @@ exports.create = function (data, user) {
     return deferred.promise;
 };
 
-exports.list = function (user) {
+exports.list = function (user, taskList) {
     var deferred = Q.defer();
 
-    Task.find({user: user}, function (err, tasks) {
+    var query = Task.find({user: user});
+    if (taskList) {
+        query.where('taskList', taskList);
+    } else {
+        query.exists('taskList', false);
+    }
+
+    query.exec(function (err, tasks) {
         if (err) {
             deferred.reject(new Error(err));
         } else {
