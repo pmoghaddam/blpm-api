@@ -1,17 +1,16 @@
 'use strict';
 
-var task = rekuire.apiController('task');
 var auth = rekuire.apiController('authentication');
 
 module.exports = function (app, passport) {
     var version = '/v0';
-    var tokenAuth = passport.authenticate('bearer', { session: false });
-
-    app.get(version + '/tasks', tokenAuth, task.list);
-    app.post(version + '/tasks', tokenAuth, task.create);
-    app.get(version + '/tasks/:id', tokenAuth, task.show);
-    app.put(version + '/tasks/:id', tokenAuth, task.update);
-    app.del(version + '/tasks/:id', tokenAuth, task.delete);
+//    var tokenAuth = passport.authenticate('bearer', { session: false });
+//
+//    app.get(version + '/tasks', tokenAuth, task.list);
+//    app.post(version + '/tasks', tokenAuth, task.create);
+//    app.get(version + '/tasks/:id', tokenAuth, task.show);
+//    app.put(version + '/tasks/:id', tokenAuth, task.update);
+//    app.del(version + '/tasks/:id', tokenAuth, task.delete);
 
     // Authentication for session-based connections (e.g. Socket.IO)
     app.post(version + '/session', passport.authenticate('local'), auth.session);
