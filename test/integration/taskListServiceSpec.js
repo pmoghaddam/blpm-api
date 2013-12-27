@@ -1,11 +1,12 @@
 'use strict';
 
-var helper = require('../testHelper');
+require('../testHelper');
 var TaskList = rekuire.model('taskList');
 var taskListService = rekuire.service('taskList');
 var userFixture = require('../fixtures/userFixture');
 var taskListFixture = require('../fixtures/taskListFixture');
 
+var Q = require('q');
 var socket = rekuire.service('socket');
 var sinon = require('sinon');
 
@@ -14,16 +15,21 @@ describe('Task List service (Integration)', function () {
 
     // Test variables
     var taskList;
-    var user = helper.user;
+    var user;
     var altUser;
 
     before(function (done) {
-        TaskList.remove().exec(function () {
-            userFixture.createAltUser().then(function (user) {
-                altUser = user;
+        var query = TaskList.remove();
+
+        Q.all([
+                Q.ninvoke(query, 'exec'),
+                userFixture.createUser(),
+                userFixture.createAltUser()
+            ]).then(function (result) {
+                user = result[1];
+                altUser = result[2];
                 done();
             });
-        });
     });
 
     beforeEach(function (done) {
@@ -39,7 +45,12 @@ describe('Task List service (Integration)', function () {
     });
 
     after(function (done) {
-        altUser.remove(done);
+        Q.all([
+                Q.ninvoke(user, 'remove'),
+                Q.ninvoke(altUser, 'remove')
+            ]).then(function () {
+                done();
+            });
     });
 
     describe('CRUD', function () {

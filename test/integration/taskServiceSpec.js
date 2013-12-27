@@ -1,12 +1,12 @@
 'use strict';
 
-var helper = require('../testHelper');
+require('../testHelper');
 var _ = require('underscore');
 var Task = rekuire.model('task');
-var User = rekuire.model('user');
 var Q = require('q');
 var taskService = rekuire.service('task');
 
+var userFixture = require('../fixtures/userFixture');
 var taskFixture = require('../fixtures/taskFixture');
 var taskListFixture = require('../fixtures/taskListFixture');
 
@@ -19,25 +19,30 @@ describe('Task service (integration)', function () {
     var taskList;
     var altTask;
     var altTaskList;
-    var user = helper.user;
+    var user;
     var altUser;
 
     /**
      * Setup & tear down logic
      */
     before(function (done) {
-        Task
-            .remove()
-            .exec()
-            .then(function () {
-                altUser = new User({
-                    name: 'Alt',
-                    email: 'altusertesting@email.com',
-                    username: 'altuser',
-                    password: 'password',
-                    token: '78651'
-                });
-                altUser.save(done);
+        Q.all([
+                Q.ninvoke(Task.remove(), 'exec'),
+                userFixture.createUser(),
+                userFixture.createAltUser()
+            ]).then(function (result) {
+                user = result[1];
+                altUser = result[2];
+                done();
+            });
+    });
+
+    after(function (done) {
+        Q.all([
+                Q.ninvoke(altUser, 'remove'),
+                Q.ninvoke(user, 'remove')
+            ]).then(function () {
+                done();
             });
     });
 
@@ -68,14 +73,14 @@ describe('Task service (integration)', function () {
     });
 
     afterEach(function (done) {
-        task.remove();
-        taskList.remove();
-        altTaskList.remove();
-        altTask.remove(done);
-    });
-
-    after(function (done) {
-        altUser.remove(done);
+        Q.all([
+                Q.ninvoke(task, 'remove'),
+                Q.ninvoke(taskList, 'remove'),
+                Q.ninvoke(altTaskList, 'remove'),
+                Q.ninvoke(altTask, 'remove')
+            ]).then(function () {
+                done();
+            });
     });
 
     describe('using multiple Task Lists', function () {

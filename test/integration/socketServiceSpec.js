@@ -3,18 +3,31 @@
 var helper = require('../testHelper');
 var socketService = rekuire.service('socket');
 
-// Test variables
-var socket;
-var user;
+var userFixture = require('../fixtures/userFixture');
 
 describe('Socket service (integration)', function () {
     this.timeout(500);
 
+    // Test variables
+    var socket;
+    var user;
+
     /**
      * Setup & tear down logic
      */
+    before(function (done) {
+        userFixture.createUser()
+            .then(function (res) {
+                user = res;
+                done();
+            });
+    });
+
+    after(function (done) {
+        user.remove(done);
+    });
+
     beforeEach(function (done) {
-        user = helper.user;
         helper.loginAndConnect(null, function (data) {
             socket = data.socket;
             done();

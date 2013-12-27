@@ -3,17 +3,33 @@
 var helper = require('../testHelper');
 var request = require('superagent');
 var User = rekuire.model('user');
-var url = helper.url;
-var versionedUrl = url + '/v0';
+
+var userFixture = require('../fixtures/userFixture');
 
 describe('Session API', function () {
     this.timeout(500);
+
+    var user;
+    var url = helper.url;
+    var versionedUrl = url + '/v0';
+
+    before(function (done) {
+        userFixture.createUser()
+            .then(function (res) {
+                user = res;
+                done();
+            });
+    });
+
+    after(function (done) {
+        user.remove(done);
+    });
 
     describe('authentication', function () {
         it('should authenticate user', function (done) {
             request
                 .post(versionedUrl + '/session')
-                .send({username: 'user', password: 'password'})
+                .send({username: user.username, password: 'password'})
                 .end(function (err, res) {
                     assert.equal(res.status, 200);
                     done();
@@ -33,9 +49,9 @@ describe('Session API', function () {
         it('should get token for authenticated user', function (done) {
             request
                 .post(versionedUrl + '/token')
-                .send({username: 'user', password: 'password'})
+                .send({username: user.username, password: 'password'})
                 .end(function (err, res) {
-                    assert.equal(res.body.access_token, helper.user.token);
+                    assert.equal(res.body.access_token, user.token);
                     done();
                 });
         });
@@ -54,7 +70,7 @@ describe('Session API', function () {
             var agent = request.agent();
             agent
                 .post(versionedUrl + '/session')
-                .send({username: 'user', password: 'password'})
+                .send({username: user.username, password: 'password'})
                 .end(function (err, res) {
                     assert.equal(res.status, 200);
 

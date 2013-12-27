@@ -1,8 +1,10 @@
 'use strict';
 
-var helper = require('../testHelper');
+require('../testHelper');
 var Task = rekuire.model('task');
+var Q = require('q');
 
+var userFixture = require('../fixtures/userFixture');
 var taskListFixture = require('../fixtures/taskListFixture');
 
 describe('Task (integration)', function () {
@@ -10,14 +12,25 @@ describe('Task (integration)', function () {
 
     // Test globals
     var task;
-    var user = helper.user;
+    var user;
     var taskList;
 
     /**
      * Setup & tear down logic
      */
     before(function (done) {
-        Task.remove().exec(done);
+        Q.all([
+                Q.ninvoke(Task.remove(), 'exec'),
+                userFixture.createUser()
+            ]).then(function (result) {
+                user = result[1];
+                done();
+            });
+
+    });
+
+    after(function (done) {
+        user.remove(done);
     });
 
     beforeEach(function (done) {
@@ -34,9 +47,13 @@ describe('Task (integration)', function () {
 
     });
 
-    afterEach(function () {
-        taskList.remove();
-        task.remove();
+    afterEach(function (done) {
+        Q.all([
+            Q.ninvoke(taskList, 'remove'),
+            Q.ninvoke(taskList, 'remove')
+        ]).then(function () {
+            done();
+        });
     });
 
     /**

@@ -1,7 +1,8 @@
 'use strict';
 
-var helper = require('../testHelper');
+require('../testHelper');
 var TaskList = rekuire.model('taskList');
+var Q = require('Q');
 
 var userFixture = require('../fixtures/userFixture');
 var taskListFixture = require('../fixtures/taskListFixture');
@@ -10,14 +11,24 @@ describe('Task List (Integration)', function () {
     this.timeout(500);
 
     // Test variables
-    var user = helper.user;
+    var user;
     var taskList;
 
     /**
      * Setup & tear down logic
      */
     before(function (done) {
-        TaskList.remove().exec(done);
+        Q.all([
+                Q.ninvoke(TaskList.remove(), 'exec'),
+                userFixture.createUser()
+            ]).then(function (result) {
+                user = result[1];
+                done();
+            });
+    });
+
+    after(function (done) {
+        user.remove(done);
     });
 
     beforeEach(function (done) {

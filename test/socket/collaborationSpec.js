@@ -14,46 +14,46 @@ describe('Socket collaboration', function () {
     var socket;
     var altSocket;
 
-    var user = helper.user;
+    var user;
     var altUser;
     var taskList;
     var altTaskList;
 
     beforeEach(function (done) {
-        var userDefer = Q.defer();
         var socketDefer = Q.defer();
         var altSocketDefer = Q.defer();
-        Q.all([taskListFixture.createTaskList({user: user}),
-                socketDefer.promise,
-                altSocketDefer.promise,
-                userDefer.promise]).then(function (result) {
+
+        Q.all([
+                userFixture.createUser(),
+                userFixture.createAltUser()
+            ]).then(function (result) {
+                user = result[0];
+                altUser = result[1];
+
+                helper.loginAndConnect({username: user.username, password: 'password'}, function (data) {
+                    socketDefer.resolve(data.socket);
+                });
+                helper.loginAndConnect({username: altUser.username, password: 'password'}, function (data) {
+                    altSocketDefer.resolve(data.socket);
+                });
+
+                return Q.all([
+                    taskListFixture.createTaskList({user: user}),
+                    taskListFixture.createTaskList({user: altUser}),
+                    socketDefer.promise,
+                    altSocketDefer.promise
+                ]);
+            }).then(function (result) {
                 taskList = result[0];
+                altTaskList = result[1];
+                socket = result[2];
+                altSocket = result[3];
                 done();
-            });
-
-
-        // Create test user
-        userFixture.createAltUser()
-            .then(function (res) {
-                altUser = res;
-                userDefer.resolve(res);
-
-                helper.loginAndConnect(null, function (data) {
-                    socket = data.socket;
-                    socketDefer.resolve();
-                });
-                helper.loginAndConnect({username: res.username, password: 'password'}, function (data) {
-                    altSocket = data.socket;
-                    altSocketDefer.resolve();
-                });
-
-                return taskListFixture.createTaskList({user: altUser});
-            }).then(function (res) {
-                altTaskList = res;
             });
     });
 
     afterEach(function () {
+        user.remove();
         altUser.remove();
         taskList.remove();
         altTaskList.remove();

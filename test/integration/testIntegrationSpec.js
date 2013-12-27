@@ -9,9 +9,25 @@ var mongoose = require('mongoose');
 var dispatcher = rekuire.lib('dispatcher');
 var io = require('socket.io-client');
 
+var userFixture = require('../fixtures/userFixture');
+
 
 describe('Basic integration test', function () {
     this.timeout(500);
+
+    var user;
+
+    before(function (done) {
+        userFixture.createUser()
+            .then(function (res) {
+                user = res;
+                done();
+            });
+    });
+
+    after(function (done) {
+        user.remove(done);
+    });
 
     it('should contact server', function (done) {
         request(url, function (error, response) {
@@ -40,7 +56,7 @@ describe('Basic integration test', function () {
     describe('authenticated', function () {
 
         it('should connect to Socket.IO (with authentication)', function (done) {
-            helper.login(null, function (data) {
+            helper.login({username: user.username, password: 'password'}, function (data) {
                 var options = _.extend({}, config.ioClient, {query: 'session_id=' + data.sessionId});
                 var socket = io.connect(config.url, options);
 

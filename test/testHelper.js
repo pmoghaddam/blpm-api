@@ -5,38 +5,26 @@ global.expect = require('chai').expect;
 
 global.rekuire = require('../lib/rekuire');
 
+var request = require('superagent');
+var _ = require('underscore');
+
 // Sets up server and MongoDB connection
 var app = require('../server');
 
-/**
- * Seed database
- */
+// Models
 var User = rekuire.model('user');
-
-// Remove all users
-User.remove().exec();
-
-// Create test user
-// Move these into a fixture later on
-var user = new User({
-    name: 'Full name',
-    email: 'test@test.com',
-    token: '12345',
-    username: 'user',
-    password: 'password'
-});
-user.save();
 
 /**
  * Global before and after
  */
-before(function () {
+before(function (done) {
+    User.remove().exec(done);
     // Add global before logic here
 });
 
 after(function (done) {
     var server = app.get('server');
-    server.close(function() {
+    server.close(function () {
         done();
     });
 });
@@ -44,16 +32,6 @@ after(function (done) {
 /**
  * Test helpers
  */
-var request = require('superagent');
-var _ = require('underscore');
-
-// Avoid repeat for sending token by creating helper
-request.Request.prototype.sendWithToken = function (data) {
-    data = data || {};
-    var merged = _.extend(data, {access_token: user.token});
-    return this.send(merged);
-};
-
 var config = rekuire.config('config');
 
 // Read session ID from agent (required by Socket.IO)
@@ -99,7 +77,6 @@ var loginAndConnect = function (credentials, cb) {
 /**
  * Expose
  */
-exports.user = user;
 exports.url = config.url;
 exports.login = login;
 exports.loginAndConnect = loginAndConnect;

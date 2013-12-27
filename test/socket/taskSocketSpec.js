@@ -2,7 +2,9 @@
 
 var helper = require('../testHelper');
 var Task = rekuire.model('task');
+var Q = require('q');
 
+var userFixture = require('../fixtures/userFixture');
 var taskFixture = require('../fixtures/taskFixture');
 var taskListFixture = require('../fixtures/taskListFixture');
 
@@ -11,12 +13,22 @@ describe('Task Socket', function () {
 
     // Globals
     var task;
-    var user = helper.user;
+    var user;
     var taskList;
     var socket;
 
     before(function (done) {
-        Task.remove().exec(done);
+        Q.all([
+                Q.ninvoke(Task.remove(), 'exec'),
+                userFixture.createUser()
+            ]).then(function (result) {
+                user = result[1];
+                done();
+            });
+    });
+
+    after(function (done) {
+        user.remove(done);
     });
 
     beforeEach(function (done) {

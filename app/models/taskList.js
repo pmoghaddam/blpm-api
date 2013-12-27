@@ -3,7 +3,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var _ = require('underscore');
-var Task = rekuire.model('task');
 
 /**
  * Schema
