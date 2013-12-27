@@ -38,11 +38,10 @@ describe('Task Socket', function () {
                 return taskFixture.createTask({user: user, taskList: taskList});
             }).then(function (res) {
                 task = res;
-
-                helper.loginAndConnect(null, function (data) {
-                    socket = data.socket;
-                    done();
-                });
+                return helper.loginAndConnect({username: user.username});
+            }).then(function (data) {
+                socket = data.socket;
+                done();
             }).done();
     });
 

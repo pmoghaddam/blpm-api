@@ -7,7 +7,7 @@ var userFixture = require('../fixtures/userFixture');
 var taskListFixture = require('../fixtures/taskListFixture');
 
 // TODO: Move into taskSocketSpec, since this is general
-describe('Socket collaboration', function () {
+describe('Collaboration (socket)', function () {
     this.timeout(500);
 
     // Test variables
@@ -20,9 +20,6 @@ describe('Socket collaboration', function () {
     var altTaskList;
 
     beforeEach(function (done) {
-        var socketDefer = Q.defer();
-        var altSocketDefer = Q.defer();
-
         Q.all([
                 userFixture.createUser(),
                 userFixture.createAltUser()
@@ -30,24 +27,17 @@ describe('Socket collaboration', function () {
                 user = result[0];
                 altUser = result[1];
 
-                helper.loginAndConnect({username: user.username, password: 'password'}, function (data) {
-                    socketDefer.resolve(data.socket);
-                });
-                helper.loginAndConnect({username: altUser.username, password: 'password'}, function (data) {
-                    altSocketDefer.resolve(data.socket);
-                });
-
                 return Q.all([
                     taskListFixture.createTaskList({user: user}),
                     taskListFixture.createTaskList({user: altUser}),
-                    socketDefer.promise,
-                    altSocketDefer.promise
+                    helper.loginAndConnect({username: user.username}),
+                    helper.loginAndConnect({username: altUser.username})
                 ]);
             }).then(function (result) {
                 taskList = result[0];
                 altTaskList = result[1];
-                socket = result[2];
-                altSocket = result[3];
+                socket = result[2].socket;
+                altSocket = result[3].socket;
                 done();
             }).done();
     });

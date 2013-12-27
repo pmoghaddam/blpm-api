@@ -7,6 +7,7 @@ global.rekuire = require('../lib/rekuire');
 
 var request = require('superagent');
 var _ = require('underscore');
+var Q = require('q');
 
 // Sets up server and MongoDB connection
 var app = require('../server');
@@ -46,32 +47,45 @@ var extractSessionId = function (res) {
     return sessionId;
 };
 
-var login = function (credentials, cb) {
-    credentials = credentials || {username: 'user', password: 'password'};
+var login = function (credentials) {
+    var defer = Q.defer();
+
+    credentials = _.extend({username: 'user', password: 'password'}, credentials);
     var agent = request.agent();
     agent.post(config.url + '/v0/session')
         .send(credentials)
         .end(function (err, res) {
-            cb({
-                agent: agent,
-                sessionId: extractSessionId(res)
-            });
+            if (err) {
+                defer.reject(new Error(err));
+            } else {
+                defer.resolve({
+                    agent: agent,
+                    sessionId: extractSessionId(res)
+                });
+            }
         });
+
+    return defer.promise;
 };
 
-// TODO: Utilize promises to cleanly fit into rest of code
 var io = require('socket.io-client');
-var loginAndConnect = function (credentials, cb) {
-    credentials = credentials || {username: 'user', password: 'password'};
-    login(credentials, function (data) {
+var loginAndConnect = function (credentials) {
+    var defer = Q.defer();
+
+    login(credentials).then(function (data) {
         var options = _.extend({}, config.ioClient, {query: 'session_id=' + data.sessionId});
         var socket = io.connect(config.url, options);
 
         data = _.extend(data, {socket: socket});
         socket.on('connect', function () {
-            cb(data);
+            defer.resolve(data);
         });
-    });
+        socket.on('error', function () {
+            defer.reject(new Error('Socket error'));
+        });
+    }).done();
+
+    return defer.promise;
 };
 
 /**

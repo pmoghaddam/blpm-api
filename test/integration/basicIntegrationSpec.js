@@ -2,17 +2,14 @@
 
 var helper = require('../testHelper');
 var request = require('superagent');
-var _ = require('underscore');
-var config = rekuire.config('config');
 var url = helper.url;
 var mongoose = require('mongoose');
 var dispatcher = rekuire.lib('dispatcher');
-var io = require('socket.io-client');
 
 var userFixture = require('../fixtures/userFixture');
 
 
-describe('Basic integration test', function () {
+describe('Basic Integration', function () {
     this.timeout(500);
 
     var user;
@@ -54,18 +51,14 @@ describe('Basic integration test', function () {
     });
 
     describe('authenticated', function () {
-
         it('should connect to Socket.IO (with authentication)', function (done) {
-            helper.login({username: user.username, password: 'password'}, function (data) {
-                var options = _.extend({}, config.ioClient, {query: 'session_id=' + data.sessionId});
-                var socket = io.connect(config.url, options);
-
-                socket.on('connected', function (data) {
-                    assert.ok(data.connected);
-                    socket.disconnect();
-                    done();
-                });
-            });
+            helper.loginAndConnect({username: user.username}).then(function (data) {
+                var socket = data.socket;
+                assert.ok(socket);
+                assert.isTrue(socket.socket.connected);
+                socket.disconnect();
+                done();
+            }).done();
         });
     });
 

@@ -28,10 +28,11 @@ describe('Socket service (integration)', function () {
     });
 
     beforeEach(function (done) {
-        helper.loginAndConnect(null, function (data) {
+        helper.loginAndConnect({username: user.username})
+            .then(function (data) {
             socket = data.socket;
             done();
-        });
+        }).done();
     });
 
     afterEach(function () {

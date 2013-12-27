@@ -30,13 +30,13 @@ describe('Task List Socket', function () {
     });
 
     beforeEach(function (done) {
-        taskListFixture.createTaskList({user: user})
-            .then(function (doc) {
-                taskList = doc;
-                helper.loginAndConnect(null, function (data) {
-                    socket = data.socket;
-                    done();
-                });
+        Q.all([
+                taskListFixture.createTaskList({user: user}),
+                helper.loginAndConnect({username: user.username})
+            ]).then(function (result) {
+                taskList = result[0];
+                socket = result[1].socket;
+                done();
             }).done();
     });
 
@@ -108,14 +108,14 @@ describe('Task List Socket', function () {
         var altSocket;
 
         beforeEach(function (done) {
-            userFixture.createAltUser({password: 'password'}).then(function (user) {
-                altUser = user;
-
-                helper.loginAndConnect({username: altUser.username, password: 'password'}, function (data) {
+            userFixture.createAltUser({password: 'password'})
+                .then(function (user) {
+                    altUser = user;
+                    return helper.loginAndConnect({username: altUser.username});
+                }).then(function (data) {
                     altSocket = data.socket;
                     done();
-                });
-            }).done();
+                }).done();
         });
 
         afterEach(function (done) {
