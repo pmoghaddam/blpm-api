@@ -6,21 +6,6 @@ var Q = require('q');
 var socket = rekuire.service('socket');
 var userService = rekuire.service('user');
 
-var findById = function (id) {
-    var deferred = Q.defer();
-
-    TaskList.findById(id, function (err, taskList) {
-        if (err) {
-            deferred.reject(new Error(err));
-        } else if (taskList === null) {
-            deferred.reject(new Error('Unable to get task list'));
-        } else {
-            deferred.resolve(taskList);
-        }
-    });
-    return deferred.promise;
-};
-
 exports.list = function (user) {
     var deferred = Q.defer();
 
@@ -116,7 +101,7 @@ exports.addCollaboratorViaEmail = function (id, email, access) {
 exports.addCollaborator = function (id, user, access) {
     var deferred = Q.defer();
 
-    findById(id).then(function (taskList) {
+    this.get(id).then(function (taskList) {
         taskList.addCollaborator(user, access);
         taskList.save(function (err, doc) {
             if (err) {
@@ -134,7 +119,7 @@ exports.addCollaborator = function (id, user, access) {
 exports.removeCollaborator = function (id, user) {
     var deferred = Q.defer();
 
-    findById(id).then(function (taskList) {
+    this.get(id).then(function (taskList) {
         taskList.removeCollaborator(user);
         taskList.save(function (err, doc) {
             if (err) {

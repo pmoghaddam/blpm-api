@@ -19,20 +19,7 @@ exports.create = function (data) {
 };
 
 exports.show = function (id) {
-    var deferred = Q.defer();
-
-    User.findById(id,
-        function (err, user) {
-            if (err) {
-                deferred.reject(new Error(err));
-            } else if (user === null) {
-                deferred.reject(new Error('Unable to get task list'));
-            } else {
-                deferred.resolve(user);
-            }
-        });
-
-    return deferred.promise;
+    return this.find({_id:id});
 };
 
 exports.find = function(where) {
