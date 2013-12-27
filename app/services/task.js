@@ -46,19 +46,7 @@ exports.list = function (user, taskList) {
 };
 
 exports.show = function (id, user) {
-    var deferred = Q.defer();
-
-    Task.findOne({_id: id, user: user}, function (err, task) {
-        if (err) {
-            deferred.reject(new Error(err));
-        } else if (task === null) {
-            deferred.reject(new Error('Unauthorized task access'));
-        } else {
-            deferred.resolve(task);
-        }
-    });
-
-    return deferred.promise;
+    return this.find({_id: id, user: user});
 };
 
 exports.update = function (id, data, user) {
@@ -95,6 +83,29 @@ exports.delete = function (id, user) {
         }, function (err) {
             deferred.reject(new Error(err));
         });
+
+    return deferred.promise;
+};
+
+/**
+ * Internally intended methods
+ */
+exports.get = function (id) {
+    return this.find({_id: id});
+};
+
+exports.find = function (where) {
+    var deferred = Q.defer();
+
+    Task.findOne(where, function (err, task) {
+        if (err) {
+            deferred.reject(new Error(err));
+        } else if (task === null) {
+            deferred.reject(new Error('Unauthorized task access'));
+        } else {
+            deferred.resolve(task);
+        }
+    });
 
     return deferred.promise;
 };

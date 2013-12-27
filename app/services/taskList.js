@@ -1,6 +1,7 @@
 'use strict';
 
 var TaskList = rekuire.model('taskList');
+var Task = rekuire.model('task');
 
 var Q = require('q');
 var socket = rekuire.service('socket');
@@ -88,12 +89,14 @@ exports.delete = function (id, user) {
             }
         });
 
+    Task.remove({taskList: id, user: user}).exec();
+
     return deferred.promise;
 };
 
 exports.addCollaboratorViaEmail = function (id, email, access) {
     var me = this;
-    return userService.find({email:email}).then(function (user) {
+    return userService.find({email: email}).then(function (user) {
         return me.addCollaborator(id, user, access);
     });
 };

@@ -3,8 +3,11 @@
 require('../testHelper');
 var TaskList = rekuire.model('taskList');
 var taskListService = rekuire.service('taskList');
+var taskService = rekuire.service('task');
+
 var userFixture = require('../fixtures/userFixture');
 var taskListFixture = require('../fixtures/taskListFixture');
+var taskFixture = require('../fixtures/taskFixture');
 
 var Q = require('q');
 var socket = rekuire.service('socket');
@@ -135,7 +138,22 @@ describe('Task List service (Integration)', function () {
                 });
         });
 
-        it('should delete all tasks of a task list when deleted');
+        it('should delete all tasks of a task list when deleted', function (done) {
+            var taskId;
+
+            taskFixture.createTask({user: user, taskList: taskList})
+                .then(function (res) {
+                    taskId = res.id.toString();
+
+                    return taskListService.delete(taskList.id, user);
+                }).then(function () {
+                    return taskService.get(taskId);
+                }).fail(function (err) {
+                    assert.ok(err);
+                    done();
+                }).done();
+
+        });
     });
 
     describe('collaboration', function () {
@@ -150,7 +168,7 @@ describe('Task List service (Integration)', function () {
                 }).done();
         });
 
-        it('should add a collaborator via email', function(done) {
+        it('should add a collaborator via email', function (done) {
             assert.isFalse(taskList.isAuthorized(altUser));
 
             taskListService.addCollaboratorViaEmail(taskList.id, altUser.email, 'editor')
