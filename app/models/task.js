@@ -53,8 +53,7 @@ var schema = new Schema({
     notes: {
         type: String
     },
-    // Enables easier distinction client-side and allows
-    // offline capability in the future
+    // Simplifies client-side sync and allows offline capability
     guid: String,
     // Tasks should not be immediately deleted (needed for sync purposes)
     deleted: {

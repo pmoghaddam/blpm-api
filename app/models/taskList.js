@@ -14,6 +14,8 @@ var schema = new Schema({
         default: '',
         required: true
     },
+    // Simplifies client-side sync and allows offline capability
+    guid: String,
     collaborators: [
         {
             user: {
