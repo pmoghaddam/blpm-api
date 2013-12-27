@@ -29,7 +29,7 @@ describe('Task List service (Integration)', function () {
                 user = result[1];
                 altUser = result[2];
                 done();
-            });
+            }).done();
     });
 
     beforeEach(function (done) {
@@ -37,7 +37,7 @@ describe('Task List service (Integration)', function () {
             .then(function (doc) {
                 taskList = doc;
                 done();
-            });
+            }).done();
     });
 
     afterEach(function (done) {
@@ -50,7 +50,7 @@ describe('Task List service (Integration)', function () {
                 Q.ninvoke(altUser, 'remove')
             ]).then(function () {
                 done();
-            });
+            }).done();
     });
 
     describe('CRUD', function () {
@@ -60,7 +60,7 @@ describe('Task List service (Integration)', function () {
                     assert.equal(taskLists.length, 1);
                     assert.equal(taskLists[0].title, taskList.title);
                     done();
-                });
+                }).done();
         });
 
         it('should create a new task list', function (done) {
@@ -75,7 +75,7 @@ describe('Task List service (Integration)', function () {
 
                     taskList.remove();
                     done();
-                });
+                }).done();
 
         });
 
@@ -85,7 +85,7 @@ describe('Task List service (Integration)', function () {
                 .then(function (taskList) {
                     assert.equal(taskList.title, data.title);
                     done();
-                });
+                }).done();
         });
 
         it('should not be able to update an unauthorized task list', function (done) {
@@ -123,7 +123,7 @@ describe('Task List service (Integration)', function () {
                         assert.ok(err);
                         done();
                     });
-                });
+                }).done();
         });
 
         it('should not delete an unauthorized task list', function (done) {
@@ -145,7 +145,7 @@ describe('Task List service (Integration)', function () {
                 .then(function (doc) {
                     assert.isTrue(doc.isAuthorized(altUser));
                     done();
-                });
+                }).done();
         });
 
         it('should remove collaborators', function (done) {
@@ -155,7 +155,7 @@ describe('Task List service (Integration)', function () {
                 }).then(function (doc) {
                     assert.isFalse(doc.isAuthorized(altUser));
                     done();
-                });
+                }).done();
         });
 
         // TODO: Not yet implemented until collaboration features are fleshed out
@@ -177,7 +177,7 @@ describe('Task List service (Integration)', function () {
                     assert(socket.emitToUser.calledOnce);
                     assert(socket.emitToUser.calledWith('taskLists:create'));
                     taskList.remove(done);
-                });
+                }).done();
         });
 
         it('should notify the user of a task list being updated', function (done) {
@@ -187,7 +187,7 @@ describe('Task List service (Integration)', function () {
                     assert(socket.emitToUser.calledOnce);
                     assert(socket.emitToUser.calledWith('taskLists:update'));
                     done();
-                });
+                }).done();
         });
 
         it('should notify the user of a task list being removed', function (done) {
@@ -196,7 +196,7 @@ describe('Task List service (Integration)', function () {
                     assert(socket.emitToUser.calledOnce);
                     assert(socket.emitToUser.calledWith('taskLists:delete'));
                     done();
-                });
+                }).done();
         });
 
 
@@ -206,7 +206,7 @@ describe('Task List service (Integration)', function () {
                     assert(socket.emitToUser.calledOnce);
                     assert(socket.emitToUser.calledWith('collaborator:create'));
                     done();
-                });
+                }).done();
         });
 
         it('should notify a user of being removed as a collaborator', function (done) {
@@ -218,7 +218,7 @@ describe('Task List service (Integration)', function () {
                     assert(socket.emitToUser.calledTwice);
                     assert(socket.emitToUser.calledWith('collaborator:delete'));
                     done();
-                });
+                }).done();
         });
     });
 

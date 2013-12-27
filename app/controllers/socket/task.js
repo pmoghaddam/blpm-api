@@ -18,7 +18,7 @@ exports.list = function (data, done) {
                 return task.toObject();
             });
             done(tasksLean);
-        });
+        }).done();
 };
 
 exports.show = function (data, done) {
@@ -26,20 +26,20 @@ exports.show = function (data, done) {
         .show(data.id, user(this))
         .then(function (task) {
             done(task.toObject());
-        });
+        }).done();
 };
 
 /**
  * One-way message
  */
 exports.create = function (data) {
-    taskService.create(data, user(this));
+    taskService.create(data, user(this)).done();
 };
 
 exports.delete = function (data) {
-    taskService.delete(data.id, user(this));
+    taskService.delete(data.id, user(this)).done();
 };
 
 exports.update = function (data) {
-    taskService.update(data.id, data, user(this));
+    taskService.update(data.id, data, user(this)).done();
 };

@@ -24,7 +24,7 @@ describe('Task Socket', function () {
             ]).then(function (result) {
                 user = result[1];
                 done();
-            });
+            }).done();
     });
 
     after(function (done) {
@@ -43,7 +43,7 @@ describe('Task Socket', function () {
                     socket = data.socket;
                     done();
                 });
-            });
+            }).done();
     });
 
     afterEach(function (done) {

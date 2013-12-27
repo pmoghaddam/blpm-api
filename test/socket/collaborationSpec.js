@@ -49,7 +49,7 @@ describe('Socket collaboration', function () {
                 socket = result[2];
                 altSocket = result[3];
                 done();
-            });
+            }).done();
     });
 
     afterEach(function () {
@@ -87,7 +87,7 @@ describe('Socket collaboration', function () {
         Q.all([socketDefer.promise,
                 altSocketDefer.promise]).then(function () {
                 done();
-            });
+            }).done();
 
         socket.on(event, function (task) {
             assert.equal(task.title, task1.title);

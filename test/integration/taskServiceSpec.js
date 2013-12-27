@@ -34,7 +34,7 @@ describe('Task service (integration)', function () {
                 user = result[1];
                 altUser = result[2];
                 done();
-            });
+            }).done();
     });
 
     after(function (done) {
@@ -43,7 +43,7 @@ describe('Task service (integration)', function () {
                 Q.ninvoke(user, 'remove')
             ]).then(function () {
                 done();
-            });
+            }).done();
     });
 
     beforeEach(function (done) {
@@ -69,7 +69,7 @@ describe('Task service (integration)', function () {
             }).then(function (input) {
                 altTask = input;
                 done();
-            });
+            }).done();
     });
 
     afterEach(function (done) {
@@ -80,7 +80,7 @@ describe('Task service (integration)', function () {
                 Q.ninvoke(altTask, 'remove')
             ]).then(function () {
                 done();
-            });
+            }).done();
     });
 
     describe('using multiple Task Lists', function () {
@@ -95,7 +95,7 @@ describe('Task service (integration)', function () {
                 }).then(function (input) {
                     otherTask = input;
                     done();
-                });
+                }).done();
         });
 
         afterEach(function (done) {
@@ -116,10 +116,7 @@ describe('Task service (integration)', function () {
                     assert.ok(userTask);
                     assert.notOk(altUserTask);
                     done();
-                })
-                .fail(function (err) {
-                    done(err);
-                });
+                }).done();
         });
 
         it('should not list tasks from a separate task list', function (done) {
@@ -134,10 +131,7 @@ describe('Task service (integration)', function () {
                     assert.ok(userTask);
                     assert.notOk(otherTaskFound);
                     done();
-                })
-                .fail(function (err) {
-                    done(err);
-                });
+                }).done();
         });
     });
 
@@ -155,7 +149,7 @@ describe('Task service (integration)', function () {
 
         Q.all(asyncTests).then(function () {
             done();
-        });
+        }).done();
     });
 
     it('should update a task associated with a user', function (done) {
@@ -172,7 +166,7 @@ describe('Task service (integration)', function () {
 
         Q.all(asyncTests).then(function () {
             done();
-        });
+        }).done();
     });
 
     it('should delete a task associated with a user', function (done) {
@@ -189,7 +183,7 @@ describe('Task service (integration)', function () {
 
         Q.all(asyncTests).then(function () {
             done();
-        });
+        }).done();
     });
 
     it('should create a task for a user', function (done) {
@@ -200,7 +194,7 @@ describe('Task service (integration)', function () {
 
                 // Clean up
                 task.remove(done);
-            });
+            }).done();
     });
 
 });

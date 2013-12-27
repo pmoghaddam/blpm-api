@@ -20,7 +20,7 @@ describe('Socket service (integration)', function () {
             .then(function (res) {
                 user = res;
                 done();
-            });
+            }).done();
     });
 
     after(function (done) {

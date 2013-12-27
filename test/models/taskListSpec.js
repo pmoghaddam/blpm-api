@@ -24,7 +24,7 @@ describe('Task List (Integration)', function () {
             ]).then(function (result) {
                 user = result[1];
                 done();
-            });
+            }).done();
     });
 
     after(function (done) {
@@ -36,7 +36,7 @@ describe('Task List (Integration)', function () {
             .then(function (res) {
                 taskList = res;
                 done();
-            });
+            }).done();
     });
 
     afterEach(function () {
@@ -82,7 +82,7 @@ describe('Task List (Integration)', function () {
                 .then(function (res) {
                     altUser = res;
                     done();
-                });
+                }).done();
         });
 
         afterEach(function (done) {

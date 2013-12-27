@@ -25,7 +25,7 @@ describe('Task (integration)', function () {
             ]).then(function (result) {
                 user = result[1];
                 done();
-            });
+            }).done();
 
     });
 
@@ -43,7 +43,7 @@ describe('Task (integration)', function () {
                     taskList: taskList
                 });
                 done();
-            });
+            }).done();
 
     });
 
@@ -53,7 +53,7 @@ describe('Task (integration)', function () {
             Q.ninvoke(taskList, 'remove')
         ]).then(function () {
             done();
-        });
+        }).done();
     });
 
     /**

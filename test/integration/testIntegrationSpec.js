@@ -22,7 +22,7 @@ describe('Basic integration test', function () {
             .then(function (res) {
                 user = res;
                 done();
-            });
+            }).done();
     });
 
     after(function (done) {

@@ -10,7 +10,7 @@ var notifyCollaborators = function (event, data, taskListId) {
     taskListService.get(taskListId)
         .then(function (taskList) {
             socket.emitToUsers(event, data, taskList.users());
-        });
+        }).done();
 };
 
 exports.create = function (data, user) {

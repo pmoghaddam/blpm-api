@@ -22,7 +22,7 @@ describe('Task List Socket', function () {
             ]).then(function (result) {
                 user = result[1];
                 done();
-            });
+            }).done();
     });
 
     after(function (done) {
@@ -37,7 +37,7 @@ describe('Task List Socket', function () {
                     socket = data.socket;
                     done();
                 });
-            });
+            }).done();
     });
 
     afterEach(function () {
@@ -115,7 +115,7 @@ describe('Task List Socket', function () {
                     altSocket = data.socket;
                     done();
                 });
-            });
+            }).done();
         });
 
         afterEach(function (done) {
