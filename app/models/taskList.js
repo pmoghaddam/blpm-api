@@ -76,16 +76,6 @@ schema.methods = {
     },
 
     /**
-     * Retrieve all tasks associated with this task list
-     * @param cb
-     */
-    tasks: function (cb) {
-        Task.find({taskList: this.id}, function (err, tasks) {
-            cb(tasks);
-        });
-    },
-
-    /**
      * Convenience method to extract all users
      * @returns {*}
      */
