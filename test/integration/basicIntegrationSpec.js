@@ -51,17 +51,49 @@ describe('Basic Integration', function () {
     });
 
     describe('authenticated', function () {
-        it('should connect to Socket.IO (with authentication)', function (done) {
+        var socket;
+
+        before(function (done) {
             helper.loginAndConnect({username: user.username}).then(function (data) {
-                var socket = data.socket;
-                assert.ok(socket);
-                assert.isTrue(socket.socket.connected);
-                socket.disconnect();
+                socket = data.socket;
                 done();
             }).done();
         });
-    });
 
+        after(function () {
+            socket.disconnect();
+        });
+
+        it('should connect to Socket.IO (with authentication)', function () {
+            assert.ok(socket);
+            assert.isTrue(socket.socket.connected);
+        });
+
+        it('should acknowledge using Socket.IO acks', function (done) {
+            socket.emit('ping', 'pong', function (data) {
+                assert.equal(data, 'pong');
+                done();
+            });
+        });
+
+        it('should acknowledge using one-time events', function (done) {
+            socket.once('ping', function (data) {
+                assert.equal(data, 'pong');
+                done();
+            });
+            socket.emit('ping', 'pong');
+        });
+
+        it('should not acknowledge using one-time event if Socket.IO ack is passed in', function (done) {
+            socket.once('ping', function () {
+                done(new Error('Unexpected event'));
+            });
+            socket.emit('ping', 'pong', function (data) {
+                assert.equal(data, 'pong');
+                done();
+            });
+        });
+    });
 
     it('should connect to application event dispatcher', function (done) {
         var fn = function () {

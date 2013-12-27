@@ -11,8 +11,10 @@ var request = function (socket, path, fn) {
     var response = function (data) {
         socket.emit(path, data);
     };
-    var request = function (data) {
-        fn.apply(socket, [data, response]);
+    var request = function (data, ack) {
+        // Utilize Socket.IO's inherit acknowledgement or response
+        var res = (ack) ? ack : response;
+        fn.apply(socket, [data, res]);
     };
     socket.on(path, request);
 };
@@ -39,5 +41,10 @@ module.exports = function (io) {
         request(socket, 'collaborator:delete', taskList.removeCollaborator);
 
         request(socket, 'users:findAll', user.findAll);
+
+        // Test end-point
+        request(socket, 'ping', function (data, done) {
+            done(data);
+        });
     });
 };
