@@ -134,6 +134,8 @@ describe('Task List service (Integration)', function () {
                     done();
                 });
         });
+
+        it('should delete all tasks of a task list when deleted');
     });
 
     describe('collaboration', function () {
@@ -142,6 +144,16 @@ describe('Task List service (Integration)', function () {
             assert.isFalse(taskList.isAuthorized(altUser));
 
             taskListService.addCollaborator(taskList.id.toString(), altUser, 'editor')
+                .then(function (doc) {
+                    assert.isTrue(doc.isAuthorized(altUser));
+                    done();
+                }).done();
+        });
+
+        it('should add a collaborator via email', function(done) {
+            assert.isFalse(taskList.isAuthorized(altUser));
+
+            taskListService.addCollaboratorViaEmail(taskList.id, altUser.email, 'editor')
                 .then(function (doc) {
                     assert.isTrue(doc.isAuthorized(altUser));
                     done();

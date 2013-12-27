@@ -35,5 +35,21 @@ exports.show = function (id) {
     return deferred.promise;
 };
 
+exports.find = function(where) {
+    var deferred = Q.defer();
+
+    User.findOne(where, function(err, res) {
+        if (err) {
+            deferred.reject(new Error(err));
+        } else if (!res) {
+            deferred.reject(new Error('User not found'));
+        } else {
+            deferred.resolve(res);
+        }
+    });
+
+    return deferred.promise;
+};
+
 // Alias
 exports.get = exports.show;

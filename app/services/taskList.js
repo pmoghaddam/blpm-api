@@ -1,8 +1,10 @@
 'use strict';
 
 var TaskList = rekuire.model('taskList');
+
 var Q = require('q');
 var socket = rekuire.service('socket');
+var userService = rekuire.service('user');
 
 var findById = function (id) {
     var deferred = Q.defer();
@@ -104,6 +106,13 @@ exports.delete = function (id, user) {
     return deferred.promise;
 };
 
+exports.addCollaboratorViaEmail = function (id, email, access) {
+    var me = this;
+    return userService.find({email:email}).then(function (user) {
+        return me.addCollaborator(id, user, access);
+    });
+};
+
 exports.addCollaborator = function (id, user, access) {
     var deferred = Q.defer();
 
@@ -143,7 +152,7 @@ exports.removeCollaborator = function (id, user) {
 /**
  * Important for internal management
  */
-exports.get = function(id) {
+exports.get = function (id) {
     var deferred = Q.defer();
 
     TaskList.findById(id,

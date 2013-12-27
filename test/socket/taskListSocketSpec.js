@@ -125,7 +125,7 @@ describe('Task List Socket', function () {
 
         it('should add a collaborator', function (done) {
             var event = 'collaborator:create';
-            var data = {id: taskList.id, user: altUser.id, access: 'editor'};
+            var data = {id: taskList.id, email: altUser.email, access: 'editor'};
 
             altSocket.on(event, function (res) {
                 assert.equal(res._id, data.id);

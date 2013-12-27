@@ -45,10 +45,7 @@ exports.update = function (data) {
 };
 
 exports.addCollaborator = function (data) {
-    userService.get(data.user)
-        .then(function (user) {
-            taskListService.addCollaborator(data.id, user, data.access);
-        }).done();
+    taskListService.addCollaboratorViaEmail(data.id, data.email, data.access);
 };
 
 exports.removeCollaborator = function (data) {
