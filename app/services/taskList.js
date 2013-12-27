@@ -139,3 +139,23 @@ exports.removeCollaborator = function (id, user) {
 
     return deferred.promise;
 };
+
+/**
+ * Important for internal management
+ */
+exports.get = function(id) {
+    var deferred = Q.defer();
+
+    TaskList.findById(id,
+        function (err, taskList) {
+            if (err) {
+                deferred.reject(new Error(err));
+            } else if (taskList === null) {
+                deferred.reject(new Error('Unable to get task list'));
+            } else {
+                deferred.resolve(taskList);
+            }
+        });
+
+    return deferred.promise;
+};

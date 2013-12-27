@@ -8,7 +8,7 @@ var mergeWithDefaults = function (data) {
     return _.extend({}, data, {
         title: 'Task'
     });
-}
+};
 
 exports.createTasks = function (data) {
     var deferred = Q.defer();

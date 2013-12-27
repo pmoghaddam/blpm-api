@@ -19,7 +19,7 @@ describe('Task List Socket', function () {
     });
 
     beforeEach(function (done) {
-        taskListFixture.createTaskList(user)
+        taskListFixture.createTaskList({user: user})
             .then(function (doc) {
                 taskList = doc;
                 helper.loginAndConnect(null, function (data) {

@@ -17,6 +17,7 @@ var User = rekuire.model('user');
 User.remove().exec();
 
 // Create test user
+// Move these into a fixture later on
 var user = new User({
     name: 'Full name',
     email: 'test@test.com',
@@ -80,6 +81,7 @@ var login = function (credentials, cb) {
         });
 };
 
+// TODO: Utilize promises to cleanly fit into rest of code
 var io = require('socket.io-client');
 var loginAndConnect = function (credentials, cb) {
     credentials = credentials || {username: 'user', password: 'password'};

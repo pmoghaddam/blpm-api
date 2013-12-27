@@ -81,6 +81,16 @@ schema.methods = {
         Task.find({taskList: this.id}, function (err, tasks) {
             cb(tasks);
         });
+    },
+
+    /**
+     * Convenience method to extract all users
+     * @returns {*}
+     */
+    users: function () {
+        return _.map(this.collaborators, function (item) {
+            return item.user;
+        });
     }
 };
 

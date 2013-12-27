@@ -4,6 +4,15 @@ var Task = rekuire.model('task');
 var Q = require('q');
 var socket = rekuire.service('socket');
 
+var taskListService = rekuire.service('taskList');
+
+var notifyCollaborators = function (event, data, taskListId) {
+    taskListService.get(taskListId)
+        .then(function (taskList) {
+            socket.emitToUsers(event, data, taskList.users());
+        });
+};
+
 exports.create = function (data, user) {
     var deferred = Q.defer();
 
@@ -11,7 +20,7 @@ exports.create = function (data, user) {
 
     Task.create(data)
         .then(function (task) {
-            socket.emitToCollaborators('tasks:create', task.toObject(), task);
+            notifyCollaborators('tasks:create', task.toObject(), task.taskList);
             deferred.resolve(task);
         }, function (err) {
             deferred.reject(new Error(err));
@@ -24,13 +33,7 @@ exports.create = function (data, user) {
 exports.list = function (user, taskList) {
     var deferred = Q.defer();
 
-    var query = Task.find({user: user});
-    if (taskList) {
-        query.where('taskList', taskList);
-    } else {
-        query.exists('taskList', false);
-    }
-
+    var query = Task.find({user: user, taskList: taskList});
     query.exec(function (err, tasks) {
         if (err) {
             deferred.reject(new Error(err));
@@ -67,7 +70,7 @@ exports.update = function (id, data, user) {
             if (task === null) {
                 deferred.reject(new Error('Unable to update task'));
             } else {
-                socket.emitToCollaborators('tasks:update', task.toObject(), task);
+                notifyCollaborators('tasks:update', task.toObject(), task.taskList);
                 deferred.resolve(task);
             }
         }, function (err) {
@@ -86,7 +89,7 @@ exports.delete = function (id, user) {
             if (task === null) {
                 deferred.reject(new Error('Unable to delete task'));
             } else {
-                socket.emitToCollaborators('tasks:delete', {_id: id}, task);
+                notifyCollaborators('tasks:delete', {_id: id}, task.taskList);
                 deferred.resolve(task);
             }
         }, function (err) {

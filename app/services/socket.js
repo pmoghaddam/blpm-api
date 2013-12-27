@@ -41,3 +41,9 @@ exports.emitToCollaborators = function (event, data, task) {
     });
 };
 
+exports.emitToUsers = function (event, data, userIds) {
+    var me = this;
+    userIds.forEach(function (item) {
+        me.emitToUser(event, data, item.toString());
+    });
+};

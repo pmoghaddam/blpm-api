@@ -2,9 +2,9 @@
 
 var helper = require('../testHelper');
 var TaskList = rekuire.model('taskList');
-var Task = rekuire.model('task');
-var User = rekuire.model('user');
-var Q = require('q');
+
+var userFixture = require('../fixtures/userFixture');
+var taskListFixture = require('../fixtures/taskListFixture');
 
 describe('Task List (Integration)', function () {
     this.timeout(500);
@@ -21,16 +21,11 @@ describe('Task List (Integration)', function () {
     });
 
     beforeEach(function (done) {
-        taskList = new TaskList({
-            title: 'Sample Task List',
-            collaborators: [
-                {
-                    user: user,
-                    access: 'owner'
-                }
-            ]
-        });
-        taskList.save(done);
+        taskListFixture.createTaskList({user: user})
+            .then(function (res) {
+                taskList = res;
+                done();
+            });
     });
 
     afterEach(function () {
@@ -68,56 +63,15 @@ describe('Task List (Integration)', function () {
         });
     });
 
-
-    describe('using Tasks', function () {
-        var task1, task2;
-
-        beforeEach(function (done) {
-
-            task1 = new Task({title: 'Task #1', taskList: taskList, user: user});
-            task2 = new Task({title: 'Task #2', user: user});
-
-            Q.all([
-                    Q.ninvoke(task1, 'save'),
-                    Q.ninvoke(task2, 'save')
-                ]).then(function () {
-                    done();
-                });
-        });
-
-        afterEach(function (done) {
-            Q.all([
-                    Q.ninvoke(task1, 'remove'),
-                    Q.ninvoke(task2, 'remove')
-                ]).then(function () {
-                    done();
-                });
-        });
-
-        it('should be able to retrieve all tasks associated with itself', function (done) {
-            taskList.tasks(function (tasks) {
-                assert.equal(tasks.length, 1);
-                assert.equal(tasks[0].title, 'Task #1');
-                done();
-            });
-        });
-    });
-
-
     describe('collaboration', function () {
         var altUser;
 
         beforeEach(function (done) {
-            User.create({
-                name: 'Full name',
-                email: 'test2@test.com',
-                token: '123456789',
-                username: 'user2',
-                password: 'password'
-            }, function (err, user) {
-                altUser = user;
-                done();
-            });
+            userFixture.createAltUser()
+                .then(function (res) {
+                    altUser = res;
+                    done();
+                });
         });
 
         afterEach(function (done) {

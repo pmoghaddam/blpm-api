@@ -2,7 +2,8 @@
 
 var helper = require('../testHelper');
 var Task = rekuire.model('task');
-var TaskList = rekuire.model('taskList');
+
+var taskListFixture = require('../fixtures/taskListFixture');
 
 describe('Task (integration)', function () {
     this.timeout(500);
@@ -10,6 +11,7 @@ describe('Task (integration)', function () {
     // Test globals
     var task;
     var user = helper.user;
+    var taskList;
 
     /**
      * Setup & tear down logic
@@ -18,14 +20,22 @@ describe('Task (integration)', function () {
         Task.remove().exec(done);
     });
 
-    beforeEach(function () {
-        task = new Task({
-            title: 'Sample Task',
-            user: helper.user
-        });
+    beforeEach(function (done) {
+        taskListFixture.createTaskList({user: user})
+            .then(function (res) {
+                taskList = res;
+                task = new Task({
+                    title: 'Sample Task',
+                    user: user,
+                    taskList: taskList
+                });
+                done();
+            });
+
     });
 
     afterEach(function () {
+        taskList.remove();
         task.remove();
     });
 
@@ -45,37 +55,6 @@ describe('Task (integration)', function () {
             assert.ok(err);
             done();
         });
-    });
-
-    describe('using a Task List', function () {
-        var taskList;
-
-        beforeEach(function (done) {
-            taskList = new TaskList({
-                title: 'Primary',
-                collaborators: [
-                    {
-                        user: user,
-                        access: 'owner'
-                    }
-                ]
-            });
-            taskList.save(done);
-        });
-
-        afterEach(function (done) {
-            taskList.remove(done);
-        });
-
-
-        it('should be able to associate a task to a task list', function (done) {
-            task.taskList = taskList;
-            task.save(function (err) {
-                assert.isNull(err);
-                done();
-            });
-        });
-
     });
 
 });

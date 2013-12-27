@@ -3,33 +3,41 @@
 var helper = require('../testHelper');
 var Task = rekuire.model('task');
 
-// Globals
-var task;
-var socket;
+var taskFixture = require('../fixtures/taskFixture');
+var taskListFixture = require('../fixtures/taskListFixture');
 
 describe('Task Socket', function () {
     this.timeout(500);
+
+    // Globals
+    var task;
+    var user = helper.user;
+    var taskList;
+    var socket;
 
     before(function (done) {
         Task.remove().exec(done);
     });
 
     beforeEach(function (done) {
-        task = new Task({
-            title: 'Sample Task',
-            user: helper.user
-        });
-        task.save();
+        taskListFixture.createTaskList({user: user})
+            .then(function (res) {
+                taskList = res;
+                return taskFixture.createTask({user: user, taskList: taskList});
+            }).then(function (res) {
+                task = res;
 
-        helper.loginAndConnect(null, function (data) {
-            socket = data.socket;
-            done();
-        });
+                helper.loginAndConnect(null, function (data) {
+                    socket = data.socket;
+                    done();
+                });
+            });
     });
 
     afterEach(function (done) {
-        Task.remove().exec(done);
+        taskList.remove();
         socket.disconnect();
+        Task.remove().exec(done);
     });
 
     /**
@@ -39,15 +47,15 @@ describe('Task Socket', function () {
         var event = 'tasks:list';
         socket.on(event, function (tasks) {
             assert.equal(tasks.length, 1);
-            assert.equal(tasks[0].title, 'Sample Task');
+            assert.equal(tasks[0].title, task.title);
             done();
         });
-        socket.emit(event);
+        socket.emit(event, {taskList: taskList.id});
     });
 
     it('should create a task', function (done) {
         var event = 'tasks:create';
-        var data = {title: 'Socket Title'};
+        var data = {title: 'Socket Title', taskList: taskList.id};
 
         socket.on(event, function (task) {
             assert.equal(task.title, data.title);

@@ -4,8 +4,11 @@ var TaskList = rekuire.model('taskList');
 var _ = require('underscore');
 var Q = require('q');
 
-exports.createTaskList = function (user, data) {
+exports.createTaskList = function (data) {
     var deferred = Q.defer();
+
+    var user = data.user;
+    delete data.user;
 
     var defaults = {
         title: 'Task List'

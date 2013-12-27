@@ -14,7 +14,8 @@ var schema = new Schema({
     },
     taskList: {
         type: Schema.ObjectId,
-        ref: 'TaskList'
+        ref: 'TaskList',
+        required: true
     },
     createdAt: {
         type: Date,

@@ -27,7 +27,7 @@ describe('Task List service (Integration)', function () {
     });
 
     beforeEach(function (done) {
-        taskListFixture.createTaskList(user)
+        taskListFixture.createTaskList({user: user})
             .then(function (doc) {
                 taskList = doc;
                 done();
