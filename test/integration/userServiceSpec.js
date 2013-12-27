@@ -1,6 +1,6 @@
 'use strict';
 
-var helper = require('../testHelper');
+require('../testHelper');
 
 var userService = rekuire.service('user');
 var userFixture = require('../fixtures/userFixture');
@@ -46,6 +46,13 @@ describe('User Service (Integration)', function () {
     it('should get a user by arbitrary (white-listed) field', function (done) {
         userService.find({email: user.email}).then(function (res) {
             assert.equal(res.email, user.email);
+            done();
+        }).done();
+    });
+
+    it('should get all users information via their ids', function (done) {
+        userService.findAllByIds([user.id]).then(function (res) {
+            assert.equal(res[0].email, user.email);
             done();
         }).done();
     });

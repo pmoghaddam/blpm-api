@@ -2,6 +2,7 @@
 
 var task = rekuire.socketController('task');
 var taskList = rekuire.socketController('taskList');
+var user = rekuire.socketController('user');
 
 /**
  * Convenient listener for playback events
@@ -36,5 +37,7 @@ module.exports = function (io) {
 
         request(socket, 'collaborator:create', taskList.addCollaborator);
         request(socket, 'collaborator:delete', taskList.removeCollaborator);
+
+        request(socket, 'users:findAll', user.findAll);
     });
 };

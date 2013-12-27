@@ -2,9 +2,16 @@
 
 var taskListService = rekuire.service('taskList');
 var userService = rekuire.service('user');
+var _ = require('underscore');
 
 var user = function (socket) {
     return socket.handshake.user;
+};
+
+var lean = function(items) {
+    return _.map(items, function (item) {
+        return item.toObject();
+    });
 };
 
 /**
@@ -14,9 +21,7 @@ exports.list = function (data, done) {
     taskListService
         .list(user(this))
         .then(function (taskLists) {
-            var tasksLean = taskLists.map(function (item) {
-                return item.toObject();
-            });
+            var tasksLean = lean(taskLists);
             done(tasksLean);
         }).done();
 };

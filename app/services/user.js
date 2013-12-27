@@ -38,5 +38,10 @@ exports.find = function(where) {
     return deferred.promise;
 };
 
+exports.findAllByIds = function(userIds) {
+    var query = User.find().where('_id').in(userIds);
+    return Q.ninvoke(query, 'exec');
+};
+
 // Alias
 exports.get = exports.show;
