@@ -103,8 +103,8 @@ describe('Task service (integration)', function () {
             otherTask.remove(done);
         });
 
-        it('should list all tasks associated with a user', function (done) {
-            taskService.list(user, taskList.id)
+        it('should list all tasks associated with a task list', function (done) {
+            taskService.list(taskList.id, user)
                 .then(function (tasks) {
                     var userTask = _.find(tasks, function (entry) {
                         return entry.id === task.id;
@@ -120,7 +120,7 @@ describe('Task service (integration)', function () {
         });
 
         it('should not list tasks from a separate task list', function (done) {
-            taskService.list(user, taskList.id)
+            taskService.list(taskList.id, user)
                 .then(function (tasks) {
                     var userTask = _.find(tasks, function (entry) {
                         return entry.id === task.id;
@@ -135,7 +135,7 @@ describe('Task service (integration)', function () {
         });
     });
 
-    it('should show a task associated with a user', function (done) {
+    it('should show a task', function (done) {
         var asyncTests = [
             taskService.show(task.id, user)
                 .then(function (task) {
@@ -175,7 +175,7 @@ describe('Task service (integration)', function () {
                 .then(function (task) {
                     assert.ok(task, "User's task could not be deleted");
                 }),
-            taskService.update(altTask.id, user)
+            taskService.delete(altTask.id, user)
                 .fail(function (err) {
                     assert.ok(err, "Able to delete other user's task");
                 })
@@ -190,7 +190,6 @@ describe('Task service (integration)', function () {
         taskService.create({title: 'Brand New Task', taskList: taskList.id}, user)
             .then(function (task) {
                 assert.ok(task, 'Task could not be created');
-                assert.equal(task.user.toString(), user.id);
 
                 // Clean up
                 task.remove(done);

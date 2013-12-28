@@ -12,7 +12,7 @@ var user = function (socket) {
 exports.list = function (data, done) {
     var taskList = (data) ? data.taskList : undefined;
     taskService
-        .list(user(this), taskList)
+        .list(taskList, user(this))
         .then(function (tasks) {
             var tasksLean = tasks.map(function (task) {
                 return task.toObject();

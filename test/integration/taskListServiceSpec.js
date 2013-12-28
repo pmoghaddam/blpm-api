@@ -141,11 +141,11 @@ describe('Task List service (Integration)', function () {
         it('should delete all tasks of a task list when deleted', function (done) {
             var taskId;
 
-            taskFixture.createTask({user: user, taskList: taskList})
+            taskFixture.createTask({taskList: taskList})
                 .then(function (res) {
                     taskId = res.id.toString();
 
-                    return taskListService.delete(taskList.id, user);
+                    return taskListService.delete(taskList.id);
                 }).then(function () {
                     return taskService.get(taskId);
                 }).fail(function (err) {

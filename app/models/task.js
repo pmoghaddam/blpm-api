@@ -7,11 +7,6 @@ var Schema = mongoose.Schema;
  * Schema
  */
 var schema = new Schema({
-    user: {
-        type: Schema.ObjectId,
-        ref: 'User',
-        required: true
-    },
     taskList: {
         type: Schema.ObjectId,
         ref: 'TaskList',

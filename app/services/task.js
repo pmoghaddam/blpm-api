@@ -13,10 +13,9 @@ var notifyCollaborators = function (event, data, taskListId) {
         }).done();
 };
 
-exports.create = function (data, user) {
+// SECURITY: Require authentication of the task actions
+exports.create = function (data) {
     var deferred = Q.defer();
-
-    data.user = user;
 
     Task.create(data)
         .then(function (task) {
@@ -30,10 +29,10 @@ exports.create = function (data, user) {
     return deferred.promise;
 };
 
-exports.list = function (user, taskList) {
+exports.list = function (taskList) {
     var deferred = Q.defer();
 
-    var query = Task.find({user: user, taskList: taskList});
+    var query = Task.find({taskList: taskList});
     query.exec(function (err, tasks) {
         if (err) {
             deferred.reject(new Error(err));
@@ -45,14 +44,14 @@ exports.list = function (user, taskList) {
     return deferred.promise;
 };
 
-exports.show = function (id, user) {
-    return this.find({_id: id, user: user});
+exports.show = function (id) {
+    return this.find({_id: id});
 };
 
-exports.update = function (id, data, user) {
+exports.update = function (id, data) {
     var deferred = Q.defer();
 
-    Task.findOneAndUpdate({_id: id, user: user}, data)
+    Task.findOneAndUpdate({_id: id}, data)
         .exec()
         .then(function (task) {
             if (task === null) {
@@ -68,10 +67,10 @@ exports.update = function (id, data, user) {
     return deferred.promise;
 };
 
-exports.delete = function (id, user) {
+exports.delete = function (id) {
     var deferred = Q.defer();
 
-    Task.findOneAndRemove({ _id: id, user: user })
+    Task.findOneAndRemove({ _id: id})
         .exec()
         .then(function (task) {
             if (task === null) {
