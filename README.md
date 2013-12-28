@@ -63,20 +63,33 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * [X] Associate tasks to users
 * [X] Have socket event emitted to appropriate users, not all users
     * [X] e.g. create a task, should not be sent to all users
-* Update fields of Task to match those of Google Tasks
+* [X] Add this.timeout back
+* [X] Update fields of Task to match those of Google Tasks
+* Various taskServiceSpec.js simply not doing what is intended!
+* Clean "exports.emitToCollaborators"
+* Security concern regarding every part of user detail coming back (e.g. security token)
+* Prevent unauthorized task activities
+* Add real logging
 * Add more tests
-    * Have grunt test:watch work on subsequent tests
+    * [X] Have grunt test:watch work on subsequent tests
+    * Add test fixtures
     * Clean database completely (includes removing all session objects)
     * For services; confirm service errors being thrown are correct
     * Add socket API tests
     * Add authentication tests
+* Last resort exception handler
+* Add REDIS for scalability
 * Update README to capture architecture (and ideas so they are not lost)
+    * Do not forget to capture how Q is used, including 'done()'
 * Provide a basic connection between Chrome extension and this API
 * Incorporate effective MEAN skeleton structure into application
 * Figure out how to scale websocket connections
 
 
 ## Tasks - Lower Priority
+* Add filters for Socket API to white-list attributes
+* Add psuedo-delete (have delete become true vs. removing document)
+    * Then have a CRON job that removes old ones
 * Change all references of "delete" to "del" (a JavaScript warning)
 * Confirm security of using CORS for API
     * Allowing any origin a good idea?
@@ -91,6 +104,11 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * Add logging strategy
     * Incorporate any other feature of MEAN skeleton that you found useful
 * Add analytics gathering strategy
+* Add continuous testing on individual file change:
+    * http://stackoverflow.com/questions/12063266/how-do-you-watch-multiple-files-but-only-run-task-on-changed-file-in-grunt-js
+
+## Task Optimizations
+* Services should have an option to request lean objects vs. full Mongoose objects
 
 ## Tasks - Infrastructure
 In the future, if you wish to leave PaaS and go towards IaaS, the following may need to be done:
