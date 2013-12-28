@@ -1,7 +1,7 @@
 'use strict';
 
 var helper = require('../testHelper');
-var TaskList = rekuire.model('task');
+var TaskList = rekuire.model('taskList');
 var Q = require('q');
 
 var taskListFixture = require('../fixtures/taskListFixture');
@@ -17,10 +17,9 @@ describe('Task List Socket', function () {
 
     before(function (done) {
         Q.all([
-                Q.ninvoke(TaskList.remove(), 'exec'),
                 userFixture.createUser()
             ]).then(function (result) {
-                user = result[1];
+                user = result[0];
                 done();
             }).done();
     });
@@ -40,9 +39,9 @@ describe('Task List Socket', function () {
             }).done();
     });
 
-    afterEach(function () {
-        taskList.remove();
+    afterEach(function (done) {
         socket.disconnect();
+        taskList.remove(done);
     });
 
     /**
@@ -71,9 +70,9 @@ describe('Task List Socket', function () {
         var event = 'taskLists:create';
         var data = {title: 'Socket Task List Title'};
 
-        socket.on(event, function (taskList) {
-            assert.equal(taskList.title, data.title);
-            done();
+        socket.on(event, function (res) {
+            assert.equal(res.title, data.title);
+            TaskList.findByIdAndRemove(res._id).exec(done);
         });
 
         socket.emit(event, data);

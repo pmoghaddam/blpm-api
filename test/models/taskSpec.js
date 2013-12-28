@@ -48,12 +48,7 @@ describe('Task (integration)', function () {
     });
 
     afterEach(function (done) {
-        Q.all([
-            Q.ninvoke(taskList, 'remove'),
-            Q.ninvoke(taskList, 'remove')
-        ]).then(function () {
-            done();
-        }).done();
+        taskList.remove(done);
     });
 
     /**

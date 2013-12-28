@@ -1,7 +1,6 @@
 'use strict';
 
 require('../testHelper');
-var TaskList = rekuire.model('taskList');
 var taskListService = rekuire.service('taskList');
 var taskService = rekuire.service('task');
 
@@ -22,15 +21,12 @@ describe('Task List service (Integration)', function () {
     var altUser;
 
     before(function (done) {
-        var query = TaskList.remove();
-
         Q.all([
-                Q.ninvoke(query, 'exec'),
                 userFixture.createUser(),
                 userFixture.createAltUser()
             ]).then(function (result) {
-                user = result[1];
-                altUser = result[2];
+                user = result[0];
+                altUser = result[1];
                 done();
             }).done();
     });

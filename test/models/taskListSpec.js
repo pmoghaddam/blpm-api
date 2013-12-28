@@ -2,7 +2,7 @@
 
 require('../testHelper');
 var TaskList = rekuire.model('taskList');
-var Q = require('Q');
+var Q = require('q');
 
 var userFixture = require('../fixtures/userFixture');
 var taskListFixture = require('../fixtures/taskListFixture');
@@ -19,10 +19,9 @@ describe('Task List (Integration)', function () {
      */
     before(function (done) {
         Q.all([
-                Q.ninvoke(TaskList.remove(), 'exec'),
                 userFixture.createUser()
             ]).then(function (result) {
-                user = result[1];
+                user = result[0];
                 done();
             }).done();
     });
@@ -39,8 +38,8 @@ describe('Task List (Integration)', function () {
             }).done();
     });
 
-    afterEach(function () {
-        taskList.remove();
+    afterEach(function (done) {
+        taskList.remove(done);
     });
 
     describe('persistence', function () {

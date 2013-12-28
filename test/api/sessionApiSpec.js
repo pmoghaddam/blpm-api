@@ -18,7 +18,7 @@ describe('Session API', function () {
             .then(function (res) {
                 user = res;
                 done();
-            });
+            }).done();
     });
 
     after(function (done) {

@@ -19,7 +19,7 @@ var User = rekuire.model('user');
  * Global before and after
  */
 before(function (done) {
-    User.remove().exec(done);
+    User.remove({}).exec(done);
     // Add global before logic here
 });
 
