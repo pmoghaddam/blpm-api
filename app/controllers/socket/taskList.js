@@ -18,45 +18,45 @@ var lean = function(items) {
  * Two-way message
  */
 exports.list = function (data, done) {
-    taskListService
+    return taskListService
         .list(user(this))
         .then(function (taskLists) {
             var tasksLean = lean(taskLists);
             done(tasksLean);
-        }).done();
+        });
 };
 
 exports.show = function (data, done) {
-    taskListService
+    return taskListService
         .show(data.id, user(this))
         .then(function (item) {
             done(item.toObject());
-        }).done();
+        });
 };
 
 /**
  * One-way message
  */
 exports.create = function (data) {
-    taskListService.create(data, user(this)).done();
+    return taskListService.create(data, user(this));
 };
 
 exports.delete = function (data) {
-    taskListService.delete(data.id, user(this)).done();
+    return taskListService.delete(data.id, user(this));
 };
 
 exports.update = function (data) {
-    taskListService.update(data.id, data, user(this)).done();
+    return taskListService.update(data.id, data, user(this));
 };
 
 exports.addCollaborator = function (data) {
-    taskListService.addCollaboratorViaEmail(data.id, data.email, data.access, user(this));
+    return taskListService.addCollaboratorViaEmail(data.id, data.email, data.access, user(this));
 };
 
 exports.removeCollaborator = function (data) {
     var requestingUser = user(this);
-    userService.get(data.user)
+    return userService.get(data.user)
         .then(function (res) {
             taskListService.removeCollaborator(data.id, res, requestingUser);
-        }).done();
+        });
 };

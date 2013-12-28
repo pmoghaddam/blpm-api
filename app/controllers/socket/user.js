@@ -10,8 +10,8 @@ var lean = function (items) {
 };
 
 exports.findAll = function (data, done) {
-    userService.findAllByIds(data.users).then(function (res) {
+    return userService.findAllByIds(data.users).then(function (res) {
         var users = lean(res);
         done(users);
-    }).done();
+    });
 };

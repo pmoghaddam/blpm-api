@@ -1,5 +1,7 @@
 'use strict';
 
+var Q = require('q');
+
 var task = rekuire.socketController('task');
 var taskList = rekuire.socketController('taskList');
 var user = rekuire.socketController('user');
@@ -14,8 +16,13 @@ var request = function (socket, path, fn) {
     var request = function (data, ack) {
         // Utilize Socket.IO's inherit acknowledgement or response
         var res = (ack) ? ack : response;
-        fn.apply(socket, [data, res]);
+        fn.apply(socket, [data, res])
+            .fail(function (err) {
+                // TODO: Improve error handling
+                console.error(err);
+            });
     };
+
     socket.on(path, request);
 };
 
@@ -44,7 +51,10 @@ module.exports = function (io) {
 
         // Test end-point
         request(socket, 'ping', function (data, done) {
-            done(data);
+            return Q.fcall(function () {
+                done(data);
+                return data;
+            });
         });
     });
 };
