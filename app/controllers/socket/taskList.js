@@ -50,12 +50,13 @@ exports.update = function (data) {
 };
 
 exports.addCollaborator = function (data) {
-    taskListService.addCollaboratorViaEmail(data.id, data.email, data.access);
+    taskListService.addCollaboratorViaEmail(data.id, data.email, data.access, user(this));
 };
 
 exports.removeCollaborator = function (data) {
+    var requestingUser = user(this);
     userService.get(data.user)
-        .then(function (user) {
-            taskListService.removeCollaborator(data.id, user);
+        .then(function (res) {
+            taskListService.removeCollaborator(data.id, res, requestingUser);
         }).done();
 };

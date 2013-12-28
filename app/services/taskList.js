@@ -94,23 +94,23 @@ exports.delete = function (id, user) {
     return deferred.promise;
 };
 
-exports.addCollaboratorViaEmail = function (id, email, access) {
+exports.addCollaboratorViaEmail = function (id, email, access, user) {
     var me = this;
-    return userService.find({email: email}).then(function (user) {
-        return me.addCollaborator(id, user, access);
+    return userService.find({email: email}).then(function (collaborator) {
+        return me.addCollaborator(id, collaborator, access, user);
     });
 };
 
-exports.addCollaborator = function (id, user, access) {
+exports.addCollaborator = function (id, collaborator, access, user) {
     var deferred = Q.defer();
 
     this.get(id).then(function (taskList) {
-        taskList.addCollaborator(user, access);
+        taskList.addCollaborator(collaborator, access);
         taskList.save(function (err, doc) {
             if (err) {
                 deferred.reject(new Error(err));
             } else {
-                socket.emitToUser('collaborator:create', doc.toObject(), user.id);
+                socket.emitToUser('collaborators:create', {taskList: doc.toObject(), user: collaborator.toObject()}, user.id);
                 deferred.resolve(doc);
             }
         });
@@ -119,16 +119,16 @@ exports.addCollaborator = function (id, user, access) {
     return deferred.promise;
 };
 
-exports.removeCollaborator = function (id, user) {
+exports.removeCollaborator = function (id, collaborator, user) {
     var deferred = Q.defer();
 
     this.get(id).then(function (taskList) {
-        taskList.removeCollaborator(user);
+        taskList.removeCollaborator(collaborator);
         taskList.save(function (err, doc) {
             if (err) {
                 deferred.reject(new Error(err));
             } else {
-                socket.emitToUser('collaborator:delete', {_id: id}, user.id);
+                socket.emitToUser('collaborators:delete', {taskList: {_id: id}, user: collaborator.toObject()}, user.id);
                 deferred.resolve(doc);
             }
         });

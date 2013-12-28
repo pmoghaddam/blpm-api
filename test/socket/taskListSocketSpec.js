@@ -124,11 +124,11 @@ describe('Task List Socket', function () {
         });
 
         it('should add a collaborator', function (done) {
-            var event = 'collaborator:create';
+            var event = 'collaborators:create';
             var data = {id: taskList.id, email: altUser.email, access: 'editor'};
 
-            altSocket.on(event, function (res) {
-                assert.equal(res._id, data.id);
+            socket.on(event, function (res) {
+                assert.equal(res.taskList._id, data.id);
                 done();
             });
 
@@ -136,12 +136,12 @@ describe('Task List Socket', function () {
         });
 
         it('should remove a collaborator', function (done) {
-            var event = 'collaborator:delete';
+            var event = 'collaborators:delete';
             var data = {id: taskList.id, user: altUser.id};
             taskList.addCollaborator(altUser, 'editor');
 
-            altSocket.on(event, function (res) {
-                assert.equal(res._id, data.id);
+            socket.on(event, function (res) {
+                assert.equal(res.taskList._id, data.id);
                 done();
             });
 

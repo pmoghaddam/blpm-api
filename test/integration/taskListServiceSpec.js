@@ -161,17 +161,19 @@ describe('Task List service (Integration)', function () {
         it('should add collaborators', function (done) {
             assert.isFalse(taskList.isAuthorized(altUser));
 
-            taskListService.addCollaborator(taskList.id.toString(), altUser, 'editor')
+            taskListService.addCollaborator(taskList.id.toString(), altUser, 'editor', user)
                 .then(function (doc) {
                     assert.isTrue(doc.isAuthorized(altUser));
                     done();
                 }).done();
         });
 
+        it('should ignore adding a collaborator twice');
+
         it('should add a collaborator via email', function (done) {
             assert.isFalse(taskList.isAuthorized(altUser));
 
-            taskListService.addCollaboratorViaEmail(taskList.id, altUser.email, 'editor')
+            taskListService.addCollaboratorViaEmail(taskList.id, altUser.email, 'editor', user)
                 .then(function (doc) {
                     assert.isTrue(doc.isAuthorized(altUser));
                     done();
@@ -179,14 +181,17 @@ describe('Task List service (Integration)', function () {
         });
 
         it('should remove collaborators', function (done) {
-            taskListService.addCollaborator(taskList.id, altUser, 'editor')
+            taskListService.addCollaborator(taskList.id, altUser, 'editor', user)
                 .then(function () {
-                    return taskListService.removeCollaborator(taskList.id, altUser);
+                    return taskListService.removeCollaborator(taskList.id, altUser, user);
                 }).then(function (doc) {
                     assert.isFalse(doc.isAuthorized(altUser));
                     done();
                 }).done();
         });
+
+        it('should not add to an unauthorized tasklist');
+        it('should not remove from an unauthorized tasklist');
 
         // TODO: Not yet implemented until collaboration features are fleshed out
         it('should update access of a collaborator');
@@ -231,22 +236,22 @@ describe('Task List service (Integration)', function () {
 
 
         it('should notify a user of being added as a collaborator', function (done) {
-            taskListService.addCollaborator(taskList.id, altUser, 'editor')
+            taskListService.addCollaborator(taskList.id, altUser, 'editor', user)
                 .then(function () {
                     assert(socket.emitToUser.calledOnce);
-                    assert(socket.emitToUser.calledWith('collaborator:create'));
+                    assert(socket.emitToUser.calledWith('collaborators:create'));
                     done();
                 }).done();
         });
 
         it('should notify a user of being removed as a collaborator', function (done) {
-            taskListService.addCollaborator(taskList.id, altUser, 'editor')
+            taskListService.addCollaborator(taskList.id, altUser, 'editor', user)
                 .then(function () {
-                    return taskListService.removeCollaborator(taskList.id, altUser);
+                    return taskListService.removeCollaborator(taskList.id, altUser, user);
                 })
                 .then(function () {
                     assert(socket.emitToUser.calledTwice);
-                    assert(socket.emitToUser.calledWith('collaborator:delete'));
+                    assert(socket.emitToUser.calledWith('collaborators:delete'));
                     done();
                 }).done();
         });

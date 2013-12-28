@@ -37,8 +37,8 @@ module.exports = function (io) {
         request(socket, 'taskLists:show', taskList.show);
         request(socket, 'taskLists:update', taskList.update);
 
-        request(socket, 'collaborator:create', taskList.addCollaborator);
-        request(socket, 'collaborator:delete', taskList.removeCollaborator);
+        request(socket, 'collaborators:create', taskList.addCollaborator);
+        request(socket, 'collaborators:delete', taskList.removeCollaborator);
 
         request(socket, 'users:findAll', user.findAll);
 
