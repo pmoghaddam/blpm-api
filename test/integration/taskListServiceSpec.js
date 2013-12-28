@@ -168,7 +168,17 @@ describe('Task List service (Integration)', function () {
                 }).done();
         });
 
-        it('should ignore adding a collaborator twice');
+        it('should ignore adding a collaborator twice', function (done) {
+            taskListService.addCollaborator(taskList.id, altUser, 'editor', user)
+                .then(function () {
+                    return taskListService.addCollaborator(taskList.id, altUser, 'editor', user);
+                }).then(function () {
+                    done(new Error('Able to add a collaborator twice'));
+                },function (err) {
+                    assert.ok(err);
+                    done();
+                }).done();
+        });
 
         it('should add a collaborator via email', function (done) {
             assert.isFalse(taskList.isAuthorized(altUser));
@@ -190,11 +200,31 @@ describe('Task List service (Integration)', function () {
                 }).done();
         });
 
-        it('should not add to an unauthorized tasklist');
-        it('should not remove from an unauthorized tasklist');
+        it('should not add a collaborator to an unauthorized tasklist', function (done) {
+            // Stranger will attempt to add themselves
+            taskListService.addCollaborator(taskList.id, altUser, 'editor', altUser)
+                .fail(function (err) {
+                    assert(err);
+                    done();
+                }).done();
+        });
 
-        // TODO: Not yet implemented until collaboration features are fleshed out
-        it('should update access of a collaborator');
+        it('should not remove a collaborator from an unauthorized tasklist', function (done) {
+            var stranger;
+            userFixture.createUser({email: 'stranger@strange.com', username: 'stranger', token:'75910293'})
+                .then(function (res) {
+                    stranger = res;
+
+                    return taskListService.addCollaborator(taskList.id, altUser, 'editor', user);
+                }).then(function () {
+                    return taskListService.removeCollaborator(taskList.id, altUser, stranger);
+                }).fail(function (err) {
+                    assert.ok(err);
+                    done();
+                }).fin(function () {
+                    stranger.remove();
+                }).done();
+        });
     });
 
     describe('notification of the task list', function () {

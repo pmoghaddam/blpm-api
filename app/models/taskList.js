@@ -59,6 +59,11 @@ schema.methods = {
         return !!authorized;
     },
 
+    hasCollaborator: function(user) {
+        // Simple implementation for now
+        return this.isAuthorized(user);
+    },
+
     addCollaborator: function (user, access) {
         this.collaborators.push({
             user: user.id,

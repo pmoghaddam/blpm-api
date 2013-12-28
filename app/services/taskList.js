@@ -102,57 +102,70 @@ exports.addCollaboratorViaEmail = function (id, email, access, user) {
 };
 
 exports.addCollaborator = function (id, collaborator, access, user) {
-    var deferred = Q.defer();
 
-    this.get(id).then(function (taskList) {
+    return this.find({_id: id, 'collaborators.user': user}).then(function (taskList) {
+        var deferred = Q.defer();
+
+        if (taskList.hasCollaborator(collaborator)) {
+            deferred.reject(new Error('Collaborator already exists'));
+            return deferred.promise;
+        }
+
         taskList.addCollaborator(collaborator, access);
         taskList.save(function (err, doc) {
             if (err) {
                 deferred.reject(new Error(err));
             } else {
-                socket.emitToUser('collaborators:create', {taskList: doc.toObject(), user: collaborator.toObject()}, user.id);
+                var dataToEmit = {taskList: doc.toObject(), user: collaborator.toObject()};
+                socket.emitToUser('collaborators:create', dataToEmit, user.id);
                 deferred.resolve(doc);
             }
         });
-    });
 
-    return deferred.promise;
+        return deferred.promise;
+    });
 };
 
 exports.removeCollaborator = function (id, collaborator, user) {
-    var deferred = Q.defer();
 
-    this.get(id).then(function (taskList) {
+    return this.find({_id: id, 'collaborators.user': user}).then(function (taskList) {
+        var deferred = Q.defer();
+
         taskList.removeCollaborator(collaborator);
         taskList.save(function (err, doc) {
             if (err) {
                 deferred.reject(new Error(err));
             } else {
-                socket.emitToUser('collaborators:delete', {taskList: {_id: id}, user: collaborator.toObject()}, user.id);
+                var dataToEmit = {taskList: {_id: id}, user: collaborator.toObject()};
+                socket.emitToUser('collaborators:delete', dataToEmit, user.id);
                 deferred.resolve(doc);
             }
         });
+
+        return deferred.promise;
     });
 
-    return deferred.promise;
 };
 
 /**
  * Important for internal management
  */
 exports.get = function (id) {
+    return this.find({_id: id});
+};
+
+exports.find = function (where) {
     var deferred = Q.defer();
 
-    TaskList.findById(id,
-        function (err, taskList) {
-            if (err) {
-                deferred.reject(new Error(err));
-            } else if (taskList === null) {
-                deferred.reject(new Error('Unable to get task list'));
-            } else {
-                deferred.resolve(taskList);
-            }
-        });
+    TaskList.findOne(where, function (err, res) {
+        if (err) {
+            deferred.reject(new Error(err));
+        } else if (res === null) {
+            deferred.reject(new Error('Unable to get task list'));
+        } else {
+            deferred.resolve(res);
+        }
+    });
 
     return deferred.promise;
 };
