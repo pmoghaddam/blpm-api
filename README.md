@@ -67,6 +67,7 @@ should be made to keep these two layers coded modularly for a future inevitable 
 * [X] Update fields of Task to match those of Google Tasks
 * Tests fail on first run (causing problems with Jenkins build)
     * http://mongoosejs.com/docs/guide.html#indexes
+    * http://stackoverflow.com/questions/14342708/mongoose-indexing-in-production-code
 * Various taskServiceSpec.js simply not doing what is intended!
 * Clean "exports.emitToCollaborators"
 * Security concern regarding every part of user detail coming back (e.g. security token)
