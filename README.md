@@ -2,6 +2,8 @@ A real-time task management tool with a backend Node.js + Mongoose, and [front-e
 
 **Notes:** Made during Christmas break of 2013 as a quick prototype of mixing together Socket.IO, Mongoose, and Node.js with authentication.
 
+[![Screenshot](https://dl.dropboxusercontent.com/u/17908170/BLPM-Screenshot-Smaller.png)](http://www.youtube.com/watch?v=Uj0qdmFMxfw)
+
 # Overview
 This repository holds the backend implementation of the application (BLPM). At it's core, it is a Node.js + Express.js application. There are however key additions:
  
